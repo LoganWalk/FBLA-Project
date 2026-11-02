@@ -4,6 +4,7 @@ import org.jline.terminal.TerminalBuilder;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.IOException;
+import java.util.ArrayList;
 
 class Main {
   public static Scanner scanner = new Scanner(System.in);
@@ -20,6 +21,17 @@ class Main {
 
   public static void main(String[] args) throws IOException {
     greet();
+    ArrayList<Player> players = new ArrayList<>();
+
+    for (int i = 0; i < 20; i++) {
+      players.add(new Player());
+    }
+
+    // print them all
+    for (Player p : players) {
+      p.printInfo();
+      System.out.println();
+    }
   }
 
   public static void greet() throws IOException {
