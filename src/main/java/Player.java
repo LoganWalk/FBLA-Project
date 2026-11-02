@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Player {
+  // possibly introduce more posistions for more complexity
   public static final String[] positions = { "Quarterback", "Running Back", "Wide Receiver",
       "Tight End", "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker",
       "Defensive Back" };
@@ -62,10 +63,36 @@ class Player {
   public String generateName() {
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
-    return firstName + " " + lastName;
+    name = firstName + " " + lastName;
+    return name;
   }
 
+  // "Quarterback", "Running Back", "Wide Receiver","Tight End", "Offensive
+  // Lineman", "Kicker", "Defensive Lineman", "Linebacker","Defensive Back"
   public Map<String, Integer> generateStats() {
+    switch (this.position) {
+      case "Quarterback":
+        break;
+      case "Running Back":
+        break;
+      case "Wide Receiver":
+        break;
+      case "Tight End":
+        break;
+      case "Offensive Lineman":
+        break;
+      case "Kicker":
+        break;
+      case "Defensive Lineman":
+        break;
+      case "Linebacker":
+        break;
+      case "Defensive Back":
+        break;
+      default:
+        break;
+
+    }
     return stats;
   }
 
