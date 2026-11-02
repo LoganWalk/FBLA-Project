@@ -15,11 +15,10 @@
     </properties>
 
     <dependencies>
-        <!-- Datafaker -->
         <dependency>
-            <groupId>net.datafaker</groupId>
-            <artifactId>datafaker</artifactId>
-            <version>2.7.0</version>
+        <groupId>com.github.javafaker</groupId>
+        <artifactId>javafaker</artifactId>
+        <version>1.0.2</version>
         </dependency>
 
         <!-- JLine Terminal -->
