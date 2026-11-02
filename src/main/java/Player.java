@@ -8,6 +8,17 @@ class Player {
       "Tight End", "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker",
       "Defensive Back" };
   public static final Faker faker = new Faker();
+
+  public static final int basicStatMax = 69;
+  public static final int basicStatMin = 31;
+  public static final int specialStatMax = 99;
+  public static final int specialStatMin = 70;
+  public static final int belowStatMax = 30;
+  public static final int belowStatMin = 0;
+  public static final int ratingMax = 99;
+  public static final int ratingMin = 0;
+
+  
   private String name;
   private String position;
   private int rating = 0;
