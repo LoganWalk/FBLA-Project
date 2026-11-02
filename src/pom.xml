@@ -1,1 +1,8 @@
-
+<!-- Your organization or reverse domain name (e.g., com.logan) -->
+    <groupId>com.logan</groupId>
+    
+    <!-- The exact name of your project folder (e.g., my-java-app) -->
+    <artifactId>FBLA-Project</artifactId>
+    
+    <!-- Leave this as 1.0-SNAPSHOT for a new project -->
+    <version>1.0-SNAPSHOT</version>
