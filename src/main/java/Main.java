@@ -32,7 +32,13 @@ class Main {
       p.printInfo();
       System.out.println();
     }
+    Player.printRankings();
+
+
+    
   }
+  
+
 
   public static void greet() throws IOException {
     System.out.println("Hello and Welcome to The Future Business Cup!");

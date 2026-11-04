@@ -1,6 +1,10 @@
 import com.github.javafaker.Faker;
 import java.util.HashMap;
 import java.util.Map;
+import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Collections;
 
 class Player {
   // possibly introduce more posistions for more complexity
@@ -38,7 +42,6 @@ class Player {
   private int rating = 0;
   private int salary = 0;
   private int ranking = 0;
-  private int level = 0;
 
   private int passing = 0;
   private int blocking = 0;
@@ -67,6 +70,8 @@ class Player {
   private int jukeMoves = 0;
   private int jumping = 0;
 
+  private static ArrayList<Player> allPlayers = new ArrayList<>();
+
   public static final String[] statList = { "passing", "blocking", "catching", "tackling",
       "kickPower", "strength", "speed", "stamina", "agility", "throwPower", "throwAccuracy",
       "carrying", "acceleration", "routeTracking", "toughness", "stiffArm", "kickAccuracy",
@@ -80,11 +85,13 @@ class Player {
     this.position = generatePosition();
     this.stats = generateStats();
     this.rating = generateRating();
+    allPlayers.add(this);
+    rankAll();
   }
 
   public void printInfo() {
     System.out.println(this.name + " - " + this.position);
-    System.out.print("Rating: " + this.rating + "\n");
+    System.out.println("Rating: " + this.rating);
     for (String s : statList) {
       System.out.println(s + ": " + this.stats.get(s));
     }
@@ -268,15 +275,101 @@ class Player {
     return rating;
   }
 
-  public int trackRanking() {
-    return 0;
+  public static void rankAll() {
+    for (String pos : positions) {
+      ArrayList<Player> group = new ArrayList<>();
+      for (Player p : allPlayers) {
+        if (p.position.equals(pos)) {
+          group.add(p);
+        }
+      }
+      group.sort((a, b) -> b.rating - a.rating);
+      for (int i = 0; i < group.size(); i++) {
+        group.get(i).ranking = i + 1;
+      }
+
+    }
+    for (Player p : allPlayers) {
+      p.salary = p.generateSalary(p.position, p.ranking, p.rating);
+    }
+
   }
 
-  public int trackLevel() {
-    return 0;
+  public static void printRankings() {
+    for (String pos : positions) {
+      System.out.println("=== " + pos + " ===");
+
+      ArrayList<Player> group = new ArrayList<>();
+      for (Player p : allPlayers) {
+        if (p.position.equals(pos)) {
+          group.add(p);
+        }
+      }
+
+      group.sort((a, b) -> a.ranking - b.ranking); // rank 1 first
+
+      for (Player p : group) {
+        System.out.println(p.ranking + ". " + p.name + " (" + p.rating + ")");
+      }
+      System.out.println();
+    }
+
+    ArrayList<Player> bySalary = new ArrayList<>(allPlayers);
+    bySalary.sort((a, b) -> Integer.compare(b.salary, a.salary)); // highest pay first
+
+    System.out.println("=== Highest Paid ===");
+    for (int i = 0; i < bySalary.size(); i++) {
+      Player p = bySalary.get(i);
+      System.out.println((i + 1) + ". " + p.name + " (" + p.position + "): $" + String.format("%,d", p.salary));
+    }
+
   }
 
-  public int trackRating() {
-    return 0;
+  public Integer generateSalary(String pos, int ranking, int rating) {
+    int minSalary = 800000;
+    int maxSalary = 75000000;
+
+    // 0.0 at rating 50, 1.0 at rating 99
+    double t = (rating - 50) / 49.0;
+
+    // cubing it makes stars paid far more than average players
+    double curve = Math.pow(t, 3);
+
+    // how much each position can earn compared to a Quarterback
+    double posMulti;
+    switch (position) {
+      case "Quarterback":
+        posMulti = 1.00;
+        break;
+      case "Defensive Lineman":
+        posMulti = 0.60;
+        break;
+      case "Wide Receiver":
+        posMulti = 0.55;
+        break;
+      case "Offensive Lineman":
+        posMulti = 0.50;
+        break;
+      case "Defensive Back":
+        posMulti = 0.45;
+        break;
+      case "Linebacker":
+        posMulti = 0.45;
+        break;
+      case "Tight End":
+        posMulti = 0.30;
+        break;
+      case "Running Back":
+        posMulti = 0.30;
+        break;
+      default:
+        posMulti = 0.15;
+        break; // Kicker
+    }
+
+    salary = (int) (minSalary + (maxSalary - minSalary) * curve * posMulti);
+    salary = Math.max(minSalary, Math.min(maxSalary, salary));
+    return salary;
   }
+
 }
