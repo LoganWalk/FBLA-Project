@@ -161,9 +161,10 @@ class Player {
         break;
 
       case "Running Back":
-        specialStats = new String[] { "carrying", "acceleration", "jukeMoves", "stiffArm", "agility",
-            "speed", "stamina" };
-        basicStats = new String[] { "strength", "toughness", "jumping", "catching", "routeTracking" };
+        specialStats = new String[] { "carrying", "acceleration", "jukeMoves", "stiffArm",
+            "agility", "speed", "stamina" };
+        basicStats = new String[] { "strength", "toughness", "jumping", "catching",
+            "routeTracking" };
         belowStats = new String[] { "passing", "blocking", "tackling", "kickPower", "kickAccuracy",
             "throwPower", "throwAccuracy", "hitPower", "blitzing", "zoneCoverage", "manCoverage",
             "throwUnderPressurePower", "throwUnderPressureAccuracy", "blockPower" };
@@ -192,7 +193,8 @@ class Player {
         break;
 
       case "Offensive Lineman":
-        specialStats = new String[] { "blocking", "strength", "toughness", "blockPower", "hitPower" };
+        specialStats = new String[] { "blocking", "strength", "toughness", "blockPower",
+            "hitPower" };
         basicStats = new String[] { "tackling", "stamina", "stiffArm", "blitzing" };
         belowStats = new String[] { "passing", "catching", "kickPower", "speed", "agility",
             "throwPower", "throwAccuracy", "carrying", "acceleration", "routeTracking",
@@ -213,7 +215,8 @@ class Player {
 
       case "Defensive Lineman":
         specialStats = new String[] { "strength", "hitPower", "toughness" };
-        basicStats = new String[] { "tackling", "stamina", "blitzing", "manCoverage", "zoneCoverage" };
+        basicStats = new String[] { "tackling", "stamina", "blitzing", "manCoverage",
+            "zoneCoverage" };
         belowStats = new String[] { "speed", "jumping", "agility", "acceleration", "passing",
             "blocking", "blockPower" /* added */, "stiffArm", "kickAccuracy", "kickPower",
             "throwPower", "throwAccuracy", "carrying", "catching", "routeTracking",
@@ -295,32 +298,35 @@ class Player {
 
   }
 
-  public static void printRankings() {
-    for (String pos : positions) {
-      System.out.println("=== " + pos + " ===");
+  public static void printRankings(int num) {
+    if (num == 0) {
+      for (String pos : positions) {
+        System.out.println("=== " + pos + " ===");
 
-      ArrayList<Player> group = new ArrayList<>();
-      for (Player p : allPlayers) {
-        if (p.position.equals(pos)) {
-          group.add(p);
+        ArrayList<Player> group = new ArrayList<>();
+        for (Player p : allPlayers) {
+          if (p.position.equals(pos)) {
+            group.add(p);
+          }
         }
+
+        group.sort((a, b) -> a.ranking - b.ranking); // rank 1 first
+
+        for (Player p : group) {
+          System.out.println(p.ranking + ". " + p.name + " (" + p.rating + ")");
+        }
+        System.out.println();
       }
+    } else if (num == 1) {
+      ArrayList<Player> bySalary = new ArrayList<>(allPlayers);
+      bySalary.sort((a, b) -> Integer.compare(b.salary, a.salary)); // highest pay first
 
-      group.sort((a, b) -> a.ranking - b.ranking); // rank 1 first
-
-      for (Player p : group) {
-        System.out.println(p.ranking + ". " + p.name + " (" + p.rating + ")");
+      System.out.println("=== Highest Paid ===");
+      for (int i = 0; i < bySalary.size(); i++) {
+        Player p = bySalary.get(i);
+        System.out.println(
+            (i + 1) + ". " + p.name + " (" + p.position + "): $" + String.format("%,d", p.salary));
       }
-      System.out.println();
-    }
-
-    ArrayList<Player> bySalary = new ArrayList<>(allPlayers);
-    bySalary.sort((a, b) -> Integer.compare(b.salary, a.salary)); // highest pay first
-
-    System.out.println("=== Highest Paid ===");
-    for (int i = 0; i < bySalary.size(); i++) {
-      Player p = bySalary.get(i);
-      System.out.println((i + 1) + ". " + p.name + " (" + p.position + "): $" + String.format("%,d", p.salary));
     }
 
   }
@@ -370,6 +376,11 @@ class Player {
     salary = (int) (minSalary + (maxSalary - minSalary) * curve * posMulti);
     salary = Math.max(minSalary, Math.min(maxSalary, salary));
     return salary;
+  }
+
+  @Override
+  public String toString() {
+    return "Position: %s Name: %s ".formatted(this.position, this.name);
   }
 
 }
