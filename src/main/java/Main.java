@@ -32,13 +32,10 @@ class Main {
       p.printInfo();
       System.out.println();
     }
-    Player.printRankings();
-
-
-    
+    Player.printRankings(0);
+    Draft draft = new Draft(players, players.get(0));
+    draft.run();
   }
-  
-
 
   public static void greet() throws IOException {
     System.out.println("Hello and Welcome to The Future Business Cup!");
