@@ -23,17 +23,10 @@ class Main {
     greet();
     ArrayList<Player> players = new ArrayList<>();
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 250; i++) {
       players.add(new Player());
     }
-
-    // print them all
-    for (Player p : players) {
-      p.printInfo();
-      System.out.println();
-    }
-    Player.printRankings(0);
-    Draft draft = new Draft(players, players.get(0));
+    Draft draft = new Draft(players, players.get(0), teamSelected, teamSelection);
     draft.run();
   }
 

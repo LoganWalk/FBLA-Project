@@ -380,7 +380,16 @@ class Player {
 
   @Override
   public String toString() {
-    return "Position: %s Name: %s ".formatted(this.position, this.name);
+    return "Name: %s | Rating: %s | Salary: $%d".formatted(this.name, this.rating, this.salary);
   }
+
+  public String getPosition() {
+    return this.position;
+  }
+
+  public int getRating() {
+    return this.rating;
+  }
+
 
 }
