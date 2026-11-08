@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.io.PrintWriter;
 import org.jline.utils.InfoCmp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Draft {
@@ -16,6 +17,7 @@ public class Draft {
     private String teamSelected;
     private Player playerSelected;
     private String[] teamsSelection;
+    private Boolean isUserTurn;
     public static final String[] positions = { "Quarterback", "Running Back", "Wide Receiver",
             "Tight End", "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker",
             "Defensive Back" };
@@ -23,11 +25,13 @@ public class Draft {
     public static int counter = 0;
     private Map<String, Integer> teamIndexMap = new HashMap<>();
 
-    public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected, String[] teamsSelection) {
+    public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected, String[] teamsSelection,
+            Boolean isUserTurn) {
         this.players = player;
         this.playerSelected = playerSelected;
         this.teamSelected = teamSelected;
         this.teamsSelection = teamsSelection;
+        this.isUserTurn = isUserTurn;
 
     }
 
@@ -142,45 +146,50 @@ public class Draft {
     }
 
     private void selectPlayer() throws IOException {
-        try (Terminal terminal = TerminalBuilder.terminal()) {
-            terminal.enterRawMode();
+        if (!this.isUserTurn) {
+            return;
+        } else {
 
-            // 2. Move state outside of the while loop so it persists between keystrokes
-            int currentSelection = 0;
+            try (Terminal terminal = TerminalBuilder.terminal()) {
+                terminal.enterRawMode();
 
-            while (true) {
-                printOut(0, currentSelection);
+                // 2. Move state outside of the while loop so it persists between keystrokes
+                int currentSelection = 0;
 
-                int inputValue = terminal.reader().read();
+                while (true) {
+                    printOut(0, currentSelection);
 
-                // 3. Handle WASD keys (Case-insensitive)
-                if (inputValue == 'w' || inputValue == 'W') {
-                    if (currentSelection > 0)
-                        currentSelection--;
-                } else if (inputValue == 's' || inputValue == 'S') {
-                    if (currentSelection < this.players.size() - 1)
-                        currentSelection++;
-                }
-                // 4. Handle Arrow Keys (detecting the escape sequence prefix 27)
-                else if (inputValue == 27) {
-                    int next1 = terminal.reader().read();
-                    int next2 = terminal.reader().read();
+                    int inputValue = terminal.reader().read();
 
-                    if (next1 == 91 || next1 == 79) { // '[' or 'O'
-                        if (next2 == 65) { // Up Arrow ('A')
-                            if (currentSelection > 0)
-                                currentSelection--;
-                        } else if (next2 == 66) { // Down Arrow ('B')
-                            if (currentSelection < this.players.size() - 1)
-                                currentSelection++;
+                    // 3. Handle WASD keys (Case-insensitive)
+                    if (inputValue == 'w' || inputValue == 'W') {
+                        if (currentSelection > 0)
+                            currentSelection--;
+                    } else if (inputValue == 's' || inputValue == 'S') {
+                        if (currentSelection < this.players.size() - 1)
+                            currentSelection++;
+                    }
+                    // 4. Handle Arrow Keys (detecting the escape sequence prefix 27)
+                    else if (inputValue == 27) {
+                        int next1 = terminal.reader().read();
+                        int next2 = terminal.reader().read();
+
+                        if (next1 == 91 || next1 == 79) { // '[' or 'O'
+                            if (next2 == 65) { // Up Arrow ('A')
+                                if (currentSelection > 0)
+                                    currentSelection--;
+                            } else if (next2 == 66) { // Down Arrow ('B')
+                                if (currentSelection < this.players.size() - 1)
+                                    currentSelection++;
+                            }
                         }
                     }
-                }
-                // 5. Handle Enter Key (Carriage return '\r' or Newline '\n')
-                else if (inputValue == 13 || inputValue == 10) {
-                    playerSelected = players.get(currentSelection);
-                    printOut(1, 0);
-                    break;
+                    // 5. Handle Enter Key (Carriage return '\r' or Newline '\n')
+                    else if (inputValue == 13 || inputValue == 10) {
+                        playerSelected = players.get(currentSelection);
+                        printOut(1, 0);
+                        break;
+                    }
                 }
             }
         }
@@ -192,7 +201,7 @@ public class Draft {
          * randomize who goes first
          * then if it is the user they select a player if it is not the user you need to
          * make a new file that
-         * stores teams the losers and the bots where if it is not the user then the bot
+         * stores teams the users and the bots where if it is not the user then the bot
          * selects a player
          * you need to make a ai file that selects players for bot team logically
          * in the team file you need to generate teams their budgets and money they can
@@ -204,9 +213,22 @@ public class Draft {
          * team
          * then you need to make sure 150 players are in teh draft and 100 will be free
          * agents
+         * 
+         * The thing to do next is use the AiDraftSelect class to handle the bot's
+         * player selection logic.
          */
         for (int i = 0; i < this.teamsSelection.length; i++) {
             teamIndexMap.put(this.teamsSelection[i], i);
+        }
+
+        List<String> keys = new ArrayList<>(teamIndexMap.keySet());
+
+        int random = (int) (Math.random() * this.teamsSelection.length) - 1;
+        String teamName = keys.get(random);
+        if (keys.get(random).equals(this.teamSelected)) {
+            Round team = new Round(teamSelected, teamsSelection, teamIndexMap.get(teamSelected));
+        } else {
+            Round team = new Round(teamSelected, teamsSelection, teamIndexMap.get(random));
         }
         return 0;
     }

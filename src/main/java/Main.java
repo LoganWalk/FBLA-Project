@@ -18,15 +18,20 @@ class Main {
       "Deadline Dominators", "Trademark Titans" };
   public static String[] teamSelection = new String[10];
   public static String teamSelected = "";
+  public static ArrayList<Player> players;
 
-  public static void main(String[] args) throws IOException {
+  public static void main() throws IOException {
     greet();
-    ArrayList<Player> players = new ArrayList<>();
+    players = new ArrayList<>();
 
     for (int i = 0; i < 250; i++) {
       players.add(new Player());
     }
-    Draft draft = new Draft(players, players.get(0), teamSelected, teamSelection);
+  }
+
+  public static void runDraft(Boolean isUserTurn) throws IOException {
+    Draft draft = new Draft(players, players.get(0), teamSelected, teamSelection, isUserTurn);
+
     draft.run();
   }
 
