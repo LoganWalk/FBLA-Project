@@ -391,5 +391,4 @@ class Player {
     return this.rating;
   }
 
-
 }

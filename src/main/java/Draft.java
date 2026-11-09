@@ -18,6 +18,10 @@ public class Draft {
     private Player playerSelected;
     private String[] teamsSelection;
     private Boolean isUserTurn;
+    private static int count = 0;
+    private static int count2 = 0;
+    private static int count3 = 0;
+    private static Integer firstTeam = 0;
     public static final String[] positions = { "Quarterback", "Running Back", "Wide Receiver",
             "Tight End", "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker",
             "Defensive Back" };
@@ -25,13 +29,12 @@ public class Draft {
     public static int counter = 0;
     private Map<String, Integer> teamIndexMap = new HashMap<>();
 
-    public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected, String[] teamsSelection,
-            Boolean isUserTurn) {
+    public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected,
+            String[] teamsSelection) {
         this.players = player;
         this.playerSelected = playerSelected;
         this.teamSelected = teamSelected;
         this.teamsSelection = teamsSelection;
-        this.isUserTurn = isUserTurn;
 
     }
 
@@ -146,10 +149,26 @@ public class Draft {
     }
 
     private void selectPlayer() throws IOException {
-        if (!this.isUserTurn) {
+        count++;
+        if (count == 1) {
+            teamSelect();
+        }
+        int turn = round(count);
+        if (turn == 0) {
+            System.out.println("THE DRAFT HAS ENDED");
+        }
+
+        if (turn != teamIndexMap.get(teamSelected)) {
+            clearTerminal();
+            System.out.println(teamIndexMap.get(turn) + " is selecting their player from the draft");
+            /*
+             * Call the ai draft select file/object while also giving it the value of what
+             * team is actually picking
+             */
             return;
         } else {
-
+            clearTerminal();
+            System.out.println("Your team is selecting");
             try (Terminal terminal = TerminalBuilder.terminal()) {
                 terminal.enterRawMode();
 
@@ -195,24 +214,19 @@ public class Draft {
         }
     }
 
-    private int teamSelect() {
+    private void teamSelect() throws IOException {
         /*
          * Loop through for every team adding them to a dicoanry and their index
-         * randomize who goes first
-         * then if it is the user they select a player if it is not the user you need to
-         * make a new file that
-         * stores teams the users and the bots where if it is not the user then the bot
-         * selects a player
-         * you need to make a ai file that selects players for bot team logically
-         * in the team file you need to generate teams their budgets and money they can
-         * spend on players
+         * randomize who goes first then if it is the user they select a player if it is
+         * not the user you need to make a new file that stores teams the users and the
+         * bots where if it is not the user then the bot selects a player you need to
+         * make a ai file that selects players for bot team logically in the team file
+         * you need to generate teams their budgets and money they can spend on players
          * you need to ensure that the team budgets are respected when selecting players
          * and the highest will be the highest possible amount for every 15 players for
-         * each team
-         * and the lowest wil be the lowest possivle amount for every 15 plyer for eahc
-         * team
-         * then you need to make sure 150 players are in teh draft and 100 will be free
-         * agents
+         * each team and the lowest wil be the lowest possivle amount for every 15 plyer
+         * for eahc team then you need to make sure 150 players are in teh draft and 100
+         * will be free agents
          * 
          * The thing to do next is use the AiDraftSelect class to handle the bot's
          * player selection logic.
@@ -223,12 +237,40 @@ public class Draft {
 
         List<String> keys = new ArrayList<>(teamIndexMap.keySet());
 
-        int random = (int) (Math.random() * this.teamsSelection.length) - 1;
+        Integer random = (int) (Math.random() * this.teamsSelection.length) - 1;
         String teamName = keys.get(random);
-        if (keys.get(random).equals(this.teamSelected)) {
-            Round team = new Round(teamSelected, teamsSelection, teamIndexMap.get(teamSelected));
+        if (teamName.equals(this.teamSelected)) {
+            firstTeam = teamIndexMap.get(teamSelected);
         } else {
-            Round team = new Round(teamSelected, teamsSelection, teamIndexMap.get(random));
+            firstTeam = teamIndexMap.get(random);
+        }
+    }
+
+    private int round(int teamIndex) throws IOException {
+        int userTurn = 0;
+        if (firstTeam < teamIndex) {
+            userTurn = teamIndex - firstTeam + 1;
+        } else if (firstTeam > teamIndex) {
+            userTurn = this.teamsSelection.length - firstTeam + teamIndex + 1;
+        } else if (firstTeam == teamIndex) {
+            userTurn = firstTeam;
+        }
+        for (int i = firstTeam - 1; i < this.teamsSelection.length; i++) {
+            if (count2 == 151) {
+                break;
+            }
+            if (i == this.teamsSelection.length - 1) {
+                i = 0;
+            }
+
+            Boolean isUserTurn = (i == userTurn - 1);
+
+            count2++;
+            if (isUserTurn) {
+                return userTurn;
+            } else {
+                return i;
+            }
         }
         return 0;
     }

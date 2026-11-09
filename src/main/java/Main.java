@@ -1,4 +1,3 @@
-
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import java.util.Arrays;
@@ -29,8 +28,8 @@ class Main {
     }
   }
 
-  public static void runDraft(Boolean isUserTurn) throws IOException {
-    Draft draft = new Draft(players, players.get(0), teamSelected, teamSelection, isUserTurn);
+  public static void runDraft() throws IOException {
+    Draft draft = new Draft(players, players.get(0), teamSelected, teamSelection);
 
     draft.run();
   }
