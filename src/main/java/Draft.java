@@ -1,3 +1,5 @@
+
+
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import java.util.Arrays;
@@ -31,6 +33,8 @@ public class Draft {
   public static ArrayList<Player> group = new ArrayList<Player>();
   public static int counter = 0;
   private Map<String, Integer> teamIndexMap = new HashMap<>();
+  private ArrayList<Team> teams = new ArrayList<>();
+  private ArrayList<Team> aiTeams;
 
   public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected,
       String[] teamsSelection) {
@@ -52,6 +56,24 @@ public class Draft {
       // 2. Pause the execution until Enter is pressed
       scanner.nextLine();
       counter++;
+    }
+    for (String t : this.teamsSelection) {
+      Team team;
+      ArrayList<Player> teamPlayers = new ArrayList<>();
+      if (round(count) != teamIndexMap.get(teamSelected)) {
+        team = new Team(teamPlayers, t, true);
+        team.addAiTeams(team);
+        aiTeams.add(team);
+      } else {
+        team = new Team(teamPlayers, t, false);
+
+      }
+      if (teams.size() < 10) {
+        teams.add(team);
+      } else {
+        break;
+      }
+
     }
     selectPlayer();
   }
@@ -141,8 +163,12 @@ public class Draft {
       }
 
     }
-    if (number == 1) {
-      System.out.println("The team you have selected is: " + playerSelected);
+
+    for (Team t : teams) {
+      if (round(count) != 0 && round(count) == teamIndexMap.get(teamSelected)) {
+        t.addPlayer(playerSelected);
+        players.remove(playerSelected);
+      }
     }
   }
 
@@ -168,7 +194,23 @@ public class Draft {
        * Call the ai draft select file/object while also giving it the value of what
        * team is actually picking
        */
-      return;
+      boolean havePlayer = false;
+      for (Team t : aiTeams) {
+        for (String entry : teamIndexMap.keySet()) {
+          if (t.getName().equals(entry)) {
+            playerSelected = AiDraftSelect.getPlayerSelected(t, players);
+            t.addPlayer(playerSelected);
+            players.remove(playerSelected);
+            havePlayer = true;
+            break;
+          }
+
+        }
+        if (havePlayer) {
+          break;
+        }
+      }
+      printOut(1, 0);
     } else {
       clearTerminal();
       System.out.println("Your team is selecting");
@@ -209,6 +251,7 @@ public class Draft {
           // 5. Handle Enter Key (Carriage return '\r' or Newline '\n')
           else if (inputValue == 13 || inputValue == 10) {
             playerSelected = players.get(currentSelection);
+
             printOut(1, 0);
             break;
           }
