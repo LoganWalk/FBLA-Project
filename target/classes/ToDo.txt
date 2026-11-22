@@ -1,21 +1,13 @@
-The next thing to do i make the draft more interactive make sure that the player has an optiuon to skip the draft and get random players, 
-then make sure the player can alos end the draft when they run out of money and get fiulle din players, also make it to whjere the player 
-must have one person in every postion before they can select muliuple in one postion
-
-Also make a method that basically gets a team name and then returns the team with that name
 
 
 
 
-Make the skip draft,out of money, and skip roound button acuallty do something, finish and check skip draft code
-make a result print method printing out the teams, and make it work properly
+
+
 Work on free agents and seqsuqinc after draft and ranking and listing free agents
-work on creating a feild
 
-
-Make sure the players added to team and add a addPlayer method
+Work on structring and coloring the draft with colored background formatted strings and string builder
 
 
 
-Use a grid of a 2d array for the feild
-57 + 2 by 124 +20 + 6 + 2
+make a button used to switch player and make something indicate which players is selected.
