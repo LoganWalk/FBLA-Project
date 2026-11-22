@@ -39,6 +39,7 @@ public class Draft {
     public int counter3 = 0;
     public int logStart = 0;
     public int counter4 = 0;
+    private boolean seeStats = false;
 
     public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected, String[] teamsSelection) {
         this.players = player;
@@ -109,16 +110,18 @@ public class Draft {
             int printedCount = 0;
 
             if (currentSelection == -4) {
-                System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "OUT OF MONEY" + RESET);
+                System.out.println(WHITE_BACKGROUND + BLACK_TEXT
+                        + "OUT OF MONEY(Fills in the rest of your team with players of 50 rating)" + RESET);
                 globalIndex++;
             } else {
-                System.out.println("OUT OF MONEY");
+                System.out.println("OUT OF MONEY(Fills in the rest of your team with players of 50 rating)");
             }
             if (currentSelection == -3) {
-                System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "SKIP ROUND" + RESET);
+                System.out.println(WHITE_BACKGROUND + BLACK_TEXT
+                        + "SKIP ROUND(Auto selects a player for you for this round)" + RESET);
                 globalIndex++;
             } else {
-                System.out.println("SKIP ROUND");
+                System.out.println("SKIP ROUND(Auto selects a player for you for this round)");
             }
             if (currentSelection == -2) {
                 System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "SKIP DRAFT" + RESET);
@@ -262,20 +265,166 @@ public class Draft {
                         if (lowestRated != null) {
                             t.getPlayers().remove(lowestRated);
                         }
-                        t.addPlayer(generator.makeBaseCharacter(position));
+                        t.addPlayer(generator.makeRandomCharacter(position));
                     }
                 }
                 // Fill remaining roster spots to 15
                 while (t.getPlayers().size() < 15) {
                     String position = positions[(int) (Math.random() * positions.length)];
+                    t.addPlayer(generator.makeRandomCharacter(position));
+                }
+            }
+        } else if (number == 3) {
+            for (Team t : teams) {
+
+                if (t.getName().equals(teamSelected)) {
+
+                    // Human team's automatic draft selection
+                    for (String pos : positions) {
+
+                        boolean hasPosition = false;
+
+                        for (Player p : t.getPlayers()) {
+                            if (p.getPosition().equals(pos)) {
+                                hasPosition = true;
+                                break;
+                            }
+                        }
+
+                        if (!hasPosition && !players.isEmpty()) {
+
+                            // Find affordable players at the missing position
+                            ArrayList<Player> eligiblePlayers = new ArrayList<>();
+
+                            for (Player p : players) {
+                                if (p.getPosition().equals(pos) &&
+                                        p.getSalary() <= t.getBudget()) {
+
+                                    eligiblePlayers.add(p);
+                                }
+                            }
+
+                            // Randomly select one eligible player
+                            if (!eligiblePlayers.isEmpty()) {
+
+                                int random = (int) (Math.random() * eligiblePlayers.size());
+
+                                Player randomPlayer = eligiblePlayers.get(random);
+
+                                int budget = t.getBudget() - randomPlayer.getSalary();
+
+                                t.setBudget(budget);
+                                t.addPlayer(randomPlayer);
+                                players.remove(randomPlayer);
+
+                                break; // Only draft one player this round
+                            }
+                        }
+                    }
+
+                } else {
+
+                    // AI team selects one player
+                    if (t.getPlayers().size() < 15) {
+
+                        playerSelected = AiDraftSelect.getPlayerSelected(t, players);
+
+                        if (playerSelected != null) {
+
+                            int budget = t.getBudget() - playerSelected.getSalary();
+
+                            t.setBudget(budget);
+                            t.addPlayer(playerSelected);
+                            players.remove(playerSelected);
+                        }
+                    }
+                }
+            }
+
+        } else if (number == 4) {
+            Player generator = new Player();
+
+            for (Team t : teams) {
+
+                // AI teams continue drafting normally
+                if (!t.getName().equals(teamSelected)) {
+
+                    while (t.getPlayers().size() < 15 && !players.isEmpty()) {
+
+                        playerSelected = AiDraftSelect.getPlayerSelected(t, players);
+
+                        // Stop drafting if no suitable player is available
+                        if (playerSelected == null ||
+                                playerSelected.getSalary() > t.getBudget() ||
+                                !players.contains(playerSelected)) {
+
+                            break;
+                        }
+
+                        int budget = t.getBudget() - playerSelected.getSalary();
+
+                        t.setBudget(budget);
+                        t.addPlayer(playerSelected);
+                        players.remove(playerSelected);
+                    }
+                }
+
+                // Check every required position for every team
+                for (String position : positions) {
+
+                    boolean hasPosition = false;
+
+                    for (Player p : t.getPlayers()) {
+                        if (p.getPosition().equals(position)) {
+                            hasPosition = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasPosition) {
+
+                        Player lowestRated = null;
+
+                        // Find the lowest-rated player at a position
+                        // that has more than one player
+                        for (Player p : t.getPlayers()) {
+
+                            int positionCount = 0;
+
+                            for (Player p2 : t.getPlayers()) {
+                                if (p.getPosition().equals(p2.getPosition())) {
+                                    positionCount++;
+                                }
+                            }
+
+                            if (positionCount > 1) {
+
+                                if (lowestRated == null ||
+                                        p.getRating() < lowestRated.getRating()) {
+
+                                    lowestRated = p;
+                                }
+                            }
+                        }
+
+                        // Replace an extra player if necessary
+                        if (lowestRated != null) {
+                            t.getPlayers().remove(lowestRated);
+                        }
+
+                        // Add a basic player for the missing position
+                        t.addPlayer(generator.makeBaseCharacter(position));
+                    }
+                }
+
+                // Fill remaining roster spots to 15
+                while (t.getPlayers().size() < 15) {
+
+                    String position = positions[(int) (Math.random() * positions.length)];
+
                     t.addPlayer(generator.makeBaseCharacter(position));
                 }
             }
-            results();
-        } else if (number == 3) {
-            // Skip round placeholder
-        } else if (number == 4) {
-            // Out of money placeholder
         }
     }
 
@@ -311,10 +460,6 @@ public class Draft {
             mainloop: while (true) {
                 count++;
                 turn = round(count);
-                if (turn == -1) {
-                    System.out.println("THE DRAFT HAS ENDED");
-                    break;
-                }
                 if (turn != teamIndexMap.get(teamSelected)) {
                     String currentTeamName = getKeyByValue(teamIndexMap, turn);
                     System.out.println(currentTeamName + " is selecting their player from the draft");
@@ -386,6 +531,7 @@ public class Draft {
                             if (currentSelection == -2) {
                                 // Skip Draft
                                 printOut(2, 0);
+
                                 break mainloop;
                             } else if (currentSelection == -3) {
                                 // Skip Round
@@ -398,13 +544,11 @@ public class Draft {
                             } else {
                                 playerSelected = displayedPlayers.get(currentSelection);
                                 Team t1 = getTeamByName(teamSelected);
-                                if (playerSelected.getSalary() > t1.getBudget()) {
-                                    System.out.println("You cant afford this player, Pick Again");
-                                    continue;
-                                }
+
                                 boolean hasAllPostitions = positionsNeeded.isEmpty();
                                 if (!hasAllPostitions) {
-                                    if (positionsNeeded.contains(playerSelected.getPosition())) {
+                                    if (positionsNeeded.contains(playerSelected.getPosition())
+                                            && playerSelected.getSalary() <= t1.getBudget()) {
                                         positionsNeeded.remove(playerSelected.getPosition());
                                     } else {
                                         continue;
@@ -414,10 +558,25 @@ public class Draft {
                                 break;
                             }
                         }
+                        if (players.isEmpty()) {
+                            System.out.println("THE DRAFT HAS ENDED");
+                            break mainloop;
+                        }
                     }
                 }
             }
         }
+
+        System.out.print("Do you want to see the results? (Y/N): ");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim().toUpperCase();
+        seeStats = false;
+        if (input.equals("Y")) {
+            results();
+        } else {
+            System.out.println("You chose not to see the results.");
+        }
+
     }
 
     private void teamSelect() throws IOException {

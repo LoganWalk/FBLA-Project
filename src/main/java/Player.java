@@ -406,26 +406,21 @@ class Player {
     // Give the player 50 in every stat
     HashMap<String, Integer> baseStats = new HashMap<>();
 
-    for (String stat : stats.keySet()) {
+    for (String stat : this.stats.keySet()) {
       baseStats.put(stat, 50);
     }
 
     basePlayer.position = position;
     basePlayer.stats = baseStats;
-
-    // Calculate the player's actual rating
-    basePlayer.generateRating();
-
-    // Set the ranking temporarily
+    basePlayer.rating = 50;
     basePlayer.ranking = 1;
 
-    // Generate salary
-    basePlayer.salary = basePlayer.generateSalary(
-        basePlayer.position,
+    // Generate salary and name
+    basePlayer.salary = generateSalary(
+        position,
         basePlayer.ranking,
         basePlayer.rating);
 
-    // Generate name
     basePlayer.name = generateName();
 
     return basePlayer;
@@ -445,6 +440,25 @@ class Player {
 
   public void setSalary(int salary) {
     this.salary = salary;
+  }
+
+  public Player makeRandomCharacter(String position) {
+    Player randomPlayer = new Player();
+
+    randomPlayer.name = generateName();
+    randomPlayer.position = position;
+
+    // Give the player random stats
+    // (Use your existing stat-generation method here.)
+
+    randomPlayer.rating = randomPlayer.generateRating();
+    randomPlayer.ranking = 1;
+    randomPlayer.salary = generateSalary(
+        randomPlayer.position,
+        randomPlayer.ranking,
+        randomPlayer.rating);
+
+    return randomPlayer;
   }
 
 }

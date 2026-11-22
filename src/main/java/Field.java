@@ -1,17 +1,29 @@
-public class Feild {
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import java.io.IOException;
+
+public class Field {
     public static final String reset = "\u001b[0m";
-    public static final String black = "\u001b[40m  \u001b[0m";
-    public static final String green = "\u001b[48;5;22m  \u001b[0m";
-    public static final String white = "\u001b[47m  \u001b[0m";
-    public static final String yellow = "\u001b[48;5;220m  \u001b[0m";
-    public static final String red = "\u001b[48;5;88m  \u001b[0m";
-    public static final String blue = "\u001b[48;5;18m  \u001b[0m";
-    public static final String brown = "\u001b[48;5;94m  \u001b[0m";
+    public static final String[] black = { "Black", "\u001b[40m  \u001b[0m" };
+    public static final String[] green = { "Green", "\u001b[48;5;22m  \u001b[0m" };
+    public static final String[] white = { "White", "\u001b[47m  \u001b[0m" };
+    public static final String[] yellow = { "Yellow", "\u001b[48;5;220m  \u001b[0m" };
+    public static final String[] red = { "Red", "\u001b[48;5;88m  \u001b[0m" };
+    public static final String[] blue1 = { "Blue1", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue = { "Blue", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue2 = { "Blue2", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue3 = { "Blue3", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue4 = { "Blue4", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue5 = { "Blue5", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue6 = { "Blue6", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue7 = { "Blue7", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue8 = { "Blue8", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue9 = { "Blue9", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue10 = { "Blue10", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] blue11 = { "Blue11", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] brown = { "Brown", "\u001b[48;5;94m  \u001b[0m" };
 
-    public static String yard5 = """
-            """;
-
-    public static String[][] feild = {
+    public static String[][][] feild = {
 
             // Vertical white lines mark the 5-yard lines across the field.
             // Yard-line labels are placed directly beside the white markers in the first
@@ -39,24 +51,24 @@ public class Feild {
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
-        { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green,  blue, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
+        { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green,  blue5, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, red, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, blue, white, green, black },
         { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green,   red, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
-        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
+        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue6, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
         { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green,     red, green, green, red, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
-        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
+        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue7, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
         { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green,   red, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
-        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green,   red, green, white,   blue, green, blue, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
+        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green,   red, green, white,   blue8, green, blue2, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
         { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,     red, green, green, green, red, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
-        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, brown,  blue, green, blue,  green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
+        { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, brown,  blue9, green, blue1,  green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
         { black, green, white, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green,   red, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, white, green, black },
-        { black, yellow, yellow, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, yellow, yellow, black },
+        { black, yellow, yellow, yellow, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue10, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, yellow, yellow, yellow, black },
         { black, red, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green,   red, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, blue, black },
-        { black, red, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, blue, black },
+        { black, red, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white,  blue11, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, blue, black },
         { black, yellow, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, yellow, black },
-        { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green,   red, green, green, white, green,  blue, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
+        { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green,   red, green, green, white, green,  blue4, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
-        { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green,  blue, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
+        { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green,  blue3, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
         { black, green, white, green, green, green, green, green, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, white, green, green, green, green, green, green, green, green, green, green, white, green, black },
@@ -82,14 +94,129 @@ public class Feild {
         { black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black },
     // @formatter:on
     };
+    public int speed = 2;
 
-    public static void main(String[] args) {
-        String reset = "\u001b[0m";
+    public static void main(String[] args) throws IOException {
+        callMovement();
+    }
+
+    public static void printField() {
+        StringBuilder output = new StringBuilder();
+
+        output.append("\033[H\033[2J");
+
         for (int i = 0; i < feild.length; i++) {
             for (int j = 0; j < feild[i].length; j++) {
-                System.out.print(feild[i][j]);
+                output.append(feild[i][j][1]);
             }
-            System.out.println();
+            output.append("\n");
         }
+
+        System.out.print(output);
+        System.out.flush();
     }
+
+    public static int[] findPlayer(String[] player) {
+        for (int i = 0; i < feild.length; i++) {
+            for (int j = 0; j < feild[i].length; j++) {
+                if (feild[i][j] == player) {
+                    return new int[] { i, j };
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void move(String direction, int speed, int[] playerPosition) throws IOException {
+
+        if (playerPosition == null) {
+            return;
+        }
+
+        int row = playerPosition[0];
+        int col = playerPosition[1];
+
+        int newRow = row;
+        int newCol = col;
+
+        if (direction.equals("left")) {
+            newCol -= speed;
+
+        } else if (direction.equals("right")) {
+            newCol += speed;
+
+        } else if (direction.equals("up")) {
+            newRow -= speed;
+
+        } else if (direction.equals("down")) {
+            newRow += speed;
+
+        } else {
+            return;
+        }
+
+        // Check field boundaries
+        if (newRow < 4 || newRow >= feild.length - 4) {
+            return;
+        }
+
+        if (newCol < 4 || newCol >= feild[newRow].length - 3) {
+            return;
+        }
+
+        // Move player
+        String[] temp = feild[row][col];
+        String[] temp2 = feild[newRow][newCol];
+
+        feild[row][col] = temp2;
+        feild[newRow][newCol] = temp;
+
+        // Update player's stored position
+        playerPosition[0] = newRow;
+        playerPosition[1] = newCol;
+    }
+
+    public static void clearTerminal() {
+        System.out.println("\033[H\033[2J\033[3J");
+        System.out.flush();
+    }
+
+    public static void callMovement() throws IOException {
+        int count = 0;
+        try (Terminal terminal = TerminalBuilder.terminal()) {
+            terminal.enterRawMode();
+            while (true) {
+                while (true) {
+                    if (count == 0) {
+                        printField();
+                        count++;
+                    }
+                    int inputValue = terminal.reader().read();
+                    if (inputValue == 'a') {
+                        move("left", 2, findPlayer(blue2));
+                        printField();
+                        break;
+                    } else if (inputValue == 'd') {
+                        move("right", 2, findPlayer(blue2));
+                        printField();
+                        break;
+                    } else if (inputValue == 'w') {
+                        move("up", 2, findPlayer(blue2));
+                        printField();
+                        break;
+                    } else if (inputValue == 's') {
+                        move("down", 2, findPlayer(blue2));
+                        printField();
+                        break;
+                    } else if (inputValue == 'q') {
+                        terminal.close();
+                        System.exit(0);
+                    }
+
+                }
+            }
+        }
+
+    }
+
 }
