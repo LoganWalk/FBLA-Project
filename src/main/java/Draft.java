@@ -1,19 +1,16 @@
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.io.PrintWriter;
 import org.jline.utils.InfoCmp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+/* You need to make a skip round section that allows them to skip the round but they
+ * have to end up with at least 11 players form the draft then all the players they need
+ * to fill for a 15 player team will be filled with players within the rating range of 50 to 60 */
 public class Draft {
     private ArrayList<Player> players;
+    private ArrayList<Player> displayedPlayers = new ArrayList<>();
     private String teamSelected;
     private Player playerSelected;
     private String[] teamsSelection;
@@ -21,13 +18,25 @@ public class Draft {
     private static int count = 0;
     private static int count2 = 0;
     private static int count3 = 0;
+    private ArrayList<String> recentPicks = new ArrayList<>();
     private static Integer firstTeam = 0;
     public static final String[] positions = { "Quarterback", "Running Back", "Wide Receiver",
             "Tight End", "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker",
             "Defensive Back" };
+    public ArrayList<String> positionsNeeded = new ArrayList<>(
+            Arrays.asList("Quarterback", "Running Back", "Wide Receiver", "Tight End",
+                    "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker", "Defensive Back"));
     public static ArrayList<Player> group = new ArrayList<Player>();
     public static int counter = 0;
     private Map<String, Integer> teamIndexMap = new HashMap<>();
+    private ArrayList<Team> teams = new ArrayList<>();
+    private ArrayList<Team> aiTeams = new ArrayList<>();
+    private static int turn = 0;
+    public ArrayList<Player> playersSelected = new ArrayList<>();
+    public int counter2 = 1;
+    public int counter3 = 0;
+    public int logStart = 0;
+    public int counter4 = 0;
 
     public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected,
             String[] teamsSelection) {
@@ -35,26 +44,38 @@ public class Draft {
         this.playerSelected = playerSelected;
         this.teamSelected = teamSelected;
         this.teamsSelection = teamsSelection;
-
     }
 
     public void run() throws IOException {
         if (counter == 0) {
             Scanner scanner = new Scanner(System.in);
             System.out.println("TO START THE DRAFT...");
-
-            // 1. Prompt the user
             System.out.println("Press ENTER to continue...");
-
-            // 2. Pause the execution until Enter is pressed
             scanner.nextLine();
             counter++;
+        }
+        for (String t : this.teamsSelection) {
+            Team team;
+            ArrayList<Player> teamPlayers = new ArrayList<>();
+            if (!t.equals(this.teamSelected)) {
+                team = new Team(teamPlayers, t, true);
+                Team.addAiTeams(team);
+                aiTeams.add(team);
+            } else {
+                team = new Team(teamPlayers, t, false);
+            }
+            if (teams.size() < 10) {
+                teams.add(team);
+            } else {
+                break;
+            }
         }
         selectPlayer();
     }
 
     private void printOut(int number, int currentSelection) throws IOException {
         clearTerminal();
+        displayedPlayers.clear();
         String BLACK_TEXT = "\u001B[30m";
         String WHITE_BACKGROUND = "\u001B[47m";
         String RESET = "\u001B[0m";
@@ -65,81 +86,216 @@ public class Draft {
                     ----------DRAFT----------
                     =========================
                     """);
-
-        }
-        int maxVisiblePlayers = 70;
-        int totalPlayers = players.size();
-
-        // 1. Keep the start window at 0 initially, but push it forward if selection
-        // goes past the bottom
-        int startWindow = 0;
-        if (currentSelection >= maxVisiblePlayers) {
-            // Keeps the selected item exactly at the bottom of the 50-line view
-            startWindow = currentSelection - maxVisiblePlayers + 1;
-        }
-
-        // 2. Establish the end boundary
-        int endWindow = Math.min(startWindow + maxVisiblePlayers, totalPlayers);
-
-        int globalIndex = 0;
-        int printedCount = 0;
-
-        for (int j = 0; j < positions.length; j++) {
-            group = new ArrayList<Player>();
-            for (int e = 0; e < this.players.size(); e++) {
-                if (this.players.get(e).getPosition() == positions[j]) {
-                    group.add(this.players.get(e));
+            if (!recentPicks.isEmpty()) {
+                System.out.println("--- RECENT PICKS ---");
+                logStart = Math.max(0, recentPicks.size() - 10);
+                for (int k = logStart; k < recentPicks.size(); k++) {
+                    System.out.println("  " + recentPicks.get(k));
                 }
+                System.out.println("--------------------");
+            }
+            Team t1 = getTeamByName(teamSelected);
+            System.out.println("Your budget is: $" + t1.getBudget());
+            int maxVisiblePlayers = 30;
+            int totalPlayers = players.size();
+            int startWindow = 0;
+            if (currentSelection >= maxVisiblePlayers) {
+                startWindow = currentSelection - ((maxVisiblePlayers) / 3);
+            }
+            int endWindow = Math.min(startWindow + maxVisiblePlayers, totalPlayers);
+            int globalIndex = 0;
+            int printedCount = 0;
+            if (currentSelection == -4) {
+                System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "OUT OF MONEY" + RESET);
+                globalIndex++;
+            } else {
+                System.out.println("OUT OF MONEY");
+            }
+            if (currentSelection == -3) {
+                System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "SKIP ROUND" + RESET);
+                globalIndex++;
+            } else {
+                System.out.println("SKIP ROUND");
+            }
+            if (currentSelection == -2) {
+                System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "SKIP DRAFT" + RESET);
+                globalIndex++;
+            } else {
+                System.out.println("SKIP DRAFT");
             }
 
-            // Sort ascending
-            Collections.sort(group, (p1, p2) -> Integer.compare(p1.getRating(), p2.getRating()));
+            for (int j = 0; j < positions.length; j++) {
+                group = new ArrayList<Player>();
+                for (int e = 0; e < this.players.size(); e++) {
+                    if (this.players.get(e).getPosition().equals(positions[j])) {
+                        group.add(this.players.get(e));
+                    }
+                }
+                Collections.sort(group, (p1, p2) -> Integer.compare(p2.getRating(), p1.getRating()));
 
-            // Sort descending
-            Collections.sort(group, (p1, p2) -> Integer.compare(p2.getRating(), p1.getRating()));
+                boolean groupHasVisiblePlayers = false;
+                for (int i = 0; i < group.size(); i++) {
+                    int itemIndex = globalIndex + i;
+                    if (itemIndex >= startWindow && printedCount < maxVisiblePlayers) {
+                        groupHasVisiblePlayers = true;
+                        break;
+                    }
+                }
+                if (groupHasVisiblePlayers || group.size() == 0) {
+                    System.out.printf("""
+                            ----------------------
+                            %-6s
+                            ----------------------
+                            """, positions[j]);
 
-            // Only print headers if we are near the items being displayed
-            // To keep it simple, we track if any player in this group falls in our window
-            boolean groupHasVisiblePlayers = false;
-            for (int i = 0; i < group.size(); i++) {
-                int itemIndex = globalIndex + i;
-                if (itemIndex >= startWindow && printedCount < maxVisiblePlayers) {
-                    groupHasVisiblePlayers = true;
+                }
+                if (group.size() == 0) {
+                    System.out.println("NONE");
+                } else {
+                    for (int i = 0; i < group.size(); i++) {
+                        displayedPlayers.add(group.get(i));
+                        if (globalIndex >= startWindow && printedCount < maxVisiblePlayers) {
+                            if (currentSelection == globalIndex) {
+                                System.out.print(WHITE_BACKGROUND + BLACK_TEXT + (i + 1) + ". " + group.get(i)
+                                        + " <---" + RESET);
+                            } else {
+                                System.out.print((i + 1) + ". " + group.get(i));
+                            }
+                            System.out.println();
+                            printedCount++;
+                        }
+                        globalIndex++;
+                    }
+                }
+            }
+        }
+
+        else if (number == 1) {
+            for (Team t : teams) {
+                if (t.getName().equals(teamSelected)) {
+                    t.addPlayer(playerSelected);
+                    playersSelected.add(playerSelected);
+                    int budget = t.getBudget() - playerSelected.getSalary();
+                    t.setBudget(budget);
                     break;
                 }
             }
+            players.remove(playerSelected);
+            System.out.println(getKeyByValue(teamIndexMap, turn) + " Selected: " + playerSelected);
+            recentPicks.add("Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + "(You)" + ": "
+                    + playerSelected);
+        } else if (number == 2) {
 
-            if (groupHasVisiblePlayers || group.size() == 0) {
-                System.out.printf("""
-                        ----------------------
-                        %-6s
-                        ----------------------
-                        """, positions[j]);
-            }
-
-            if (group.size() == 0) {
-                // Only print NONE if it fits the view scope
-                System.out.println("NONE");
-            } else {
-                for (int i = 0; i < group.size(); i++) {
-                    // 3. Only print the player if they fall within our window limits
-                    if (globalIndex >= startWindow && printedCount < maxVisiblePlayers) {
-                        if (currentSelection == globalIndex) {
-                            System.out.print(
-                                    WHITE_BACKGROUND + BLACK_TEXT + (i + 1) + ". " + group.get(i) + " <---" + RESET);
-                        } else {
-                            System.out.print((i + 1) + ". " + group.get(i));
+            for (Team t : teams) {
+                Team t1 = getTeamByName(teamSelected);
+                if (t.equals(t1)) {
+                    while (t.getPlayers().size() < 15) {
+                        if (players.isEmpty()) {
+                            break;
                         }
-                        System.out.println();
-                        printedCount++;
+                        int random = (int) (Math.random() * (players.size()));
+                        boolean hasAllPostitions = false;
+                        if (positionsNeeded.isEmpty()) {
+                            hasAllPostitions = true;
+                        }
+                        if (!hasAllPostitions) {
+                            if (positionsNeeded.contains(players.get(random).getPosition())) {
+                                if (players.get(random).getSalary() <= t.getBudget()) {
+                                    int budget = t.getBudget() - players.get(random).getSalary();
+                                    t.setBudget(budget);
+                                    t.addPlayer(players.get(random));
+                                    positionsNeeded.remove(players.get(random).getPosition());
+                                    players.remove(random);
+
+                                }
+                                // Add the player to your team roster here
+                            } else {
+                                // Position was already filled or invalid, so skip and ask again
+                                continue;
+                            }
+                        } else {
+                            if (players.get(random).getSalary() <= t.getBudget()) {
+                                int budget = t.getBudget() - players.get(random).getSalary();
+                                t.setBudget(budget);
+                                t.addPlayer(players.get(random));
+                                players.remove(random);
+                            }
+                        }
                     }
-                    globalIndex++;
+                } else {
+                    for (int i = t.getPlayers().size(); i < 15; i++) {
+                        playerSelected = AiDraftSelect.getPlayerSelected(t, players);
+                        int budget = t.getBudget() - playerSelected.getSalary();
+                        t.setBudget(budget);
+                        t.addPlayer(playerSelected);
+                        players.remove(playerSelected);
+                    }
+                }
+            }
+            Player generator = new Player();
+
+            for (Team t : teams) {
+
+                // Make sure every position is filled
+                for (String position : positions) {
+
+                    boolean hasPosition = false;
+
+                    for (Player p : t.getPlayers()) {
+                        if (p.getPosition().equals(position)) {
+                            hasPosition = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasPosition) {
+
+                        Player lowestRated = null;
+
+                        // Find a player at a position with multiple players
+                        for (Player p : t.getPlayers()) {
+
+                            int positionCount = 0;
+
+                            for (Player p2 : t.getPlayers()) {
+                                if (p.getPosition().equals(p2.getPosition())) {
+                                    positionCount++;
+                                }
+                            }
+
+                            if (positionCount > 1) {
+
+                                if (lowestRated == null ||
+                                        p.getRating() < lowestRated.getRating()) {
+
+                                    lowestRated = p;
+                                }
+                            }
+                        }
+
+                        // Replace the lowest-rated extra player
+                        if (lowestRated != null) {
+                            t.getPlayers().remove(lowestRated);
+                        }
+
+                        t.addPlayer(generator.makeBaseCharacter(position));
+                    }
+                }
+
+                // Fill remaining roster spots to 15
+                while (t.getPlayers().size() < 15) {
+
+                    String position = positions[(int) (Math.random() * positions.length)];
+
+                    t.addPlayer(generator.makeBaseCharacter(position));
                 }
             }
 
-        }
-        if (number == 1) {
-            System.out.println("The team you have selected is: " + playerSelected);
+            results();
+        } else if (number == 3) {
+
+        } else if (number == 4) {
+
         }
     }
 
@@ -148,66 +304,144 @@ public class Draft {
         System.out.flush();
     }
 
+    public Team getTeamByName(String Name) {
+        Team t1 = teams.get(0);
+        for (Team t : teams) {
+            if (t.getName().equals(Name)) {
+                t1 = t;
+                break;
+            }
+        }
+        return t1;
+
+    }
+
+    public static <K, V> K getKeyByValue(Map<K, V> map, V targetValue) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (Objects.equals(targetValue, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     private void selectPlayer() throws IOException {
-        count++;
-        if (count == 1) {
-            teamSelect();
-        }
-        int turn = round(count);
-        if (turn == 0) {
-            System.out.println("THE DRAFT HAS ENDED");
-        }
-
-        if (turn != teamIndexMap.get(teamSelected)) {
-            clearTerminal();
-            System.out.println(teamIndexMap.get(turn) + " is selecting their player from the draft");
-            /*
-             * Call the ai draft select file/object while also giving it the value of what
-             * team is actually picking
-             */
-            return;
-        } else {
-            clearTerminal();
-            System.out.println("Your team is selecting");
-            try (Terminal terminal = TerminalBuilder.terminal()) {
-                terminal.enterRawMode();
-
-                // 2. Move state outside of the while loop so it persists between keystrokes
-                int currentSelection = 0;
-
-                while (true) {
-                    printOut(0, currentSelection);
-
-                    int inputValue = terminal.reader().read();
-
-                    // 3. Handle WASD keys (Case-insensitive)
-                    if (inputValue == 'w' || inputValue == 'W') {
-                        if (currentSelection > 0)
-                            currentSelection--;
-                    } else if (inputValue == 's' || inputValue == 'S') {
-                        if (currentSelection < this.players.size() - 1)
-                            currentSelection++;
+        teamSelect();
+        mainloop: while (true) {
+            count++;
+            turn = round(count);
+            if (turn == -1) {
+                System.out.println("THE DRAFT HAS ENDED");
+                break;
+            }
+            if (turn != teamIndexMap.get(teamSelected)) {
+                String currentTeamName = getKeyByValue(teamIndexMap, turn);
+                System.out.println(currentTeamName + " is selecting their player from the draft");
+                System.out.println("Looking for AI team: [" + getKeyByValue(teamIndexMap, turn)
+                        + "] | aiTeams size: " + aiTeams.size());
+                for (Team t : aiTeams) {
+                    if (t.getName().equals(currentTeamName)) {
+                        playerSelected = AiDraftSelect.getPlayerSelected(t, players);
+                        t.addPlayer(playerSelected);
+                        players.remove(playerSelected);
+                        int budget = t.getBudget() - playerSelected.getSalary();
+                        t.setBudget(budget);
+                        System.out.println(getKeyByValue(teamIndexMap, turn) + " Selected: " + playerSelected);
+                        recentPicks.add("Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + ": "
+                                + playerSelected);
+                        break;
                     }
-                    // 4. Handle Arrow Keys (detecting the escape sequence prefix 27)
-                    else if (inputValue == 27) {
-                        int next1 = terminal.reader().read();
-                        int next2 = terminal.reader().read();
-
-                        if (next1 == 91 || next1 == 79) { // '[' or 'O'
-                            if (next2 == 65) { // Up Arrow ('A')
-                                if (currentSelection > 0)
+                }
+            } else {
+                System.out.println("Your team is selecting");
+                try (Terminal terminal = TerminalBuilder.terminal()) {
+                    terminal.enterRawMode();
+                    int currentSelection = 0;
+                    while (true) {
+                        printOut(0, currentSelection);
+                        int inputValue = terminal.reader().read();
+                        if (inputValue == 'w' || inputValue == 'W') {
+                            if (currentSelection == 0) {
+                                currentSelection = -2;
+                            } else {
+                                if (currentSelection > -4) {
                                     currentSelection--;
-                            } else if (next2 == 66) { // Down Arrow ('B')
-                                if (currentSelection < this.players.size() - 1)
+                                }
+                            }
+                        } else if (inputValue == 's' || inputValue == 'S') {
+                            if (currentSelection == -2) {
+                                currentSelection = 0;
+                            } else {
+                                if (currentSelection < displayedPlayers.size() - 1) {
                                     currentSelection++;
+                                }
+                            }
+                        } else if (inputValue == 27) {
+                            int next1 = terminal.reader().read();
+                            int next2 = terminal.reader().read();
+                            if (next1 == 91 || next1 == 79) {
+                                if (next2 == 65) {
+                                    if (currentSelection == 0) {
+                                        currentSelection = -2;
+                                    } else {
+                                        if (currentSelection > -4) {
+                                            currentSelection--;
+                                        }
+                                    }
+                                } else if (next2 == 66) {
+                                    if (currentSelection == -2) {
+                                        currentSelection = 0;
+                                    } else {
+                                        if (currentSelection < displayedPlayers.size() - 1) {
+                                            currentSelection++;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if (inputValue == 13 || inputValue == 10) {
+                            if (currentSelection == -2) {
+                                // Skip Draft
+                                printOut(2, 0);
+                                break mainloop;
+                            } else if (currentSelection == -3) {
+                                // Skip Round
+                                printOut(3, 0);
+                                break;
+                            } else if (currentSelection == -4) {
+                                // Out of Money
+                                printOut(4, 0);
+                                break mainloop;
+                            } else {
+                                playerSelected = displayedPlayers.get(currentSelection);
+                                Team t1 = getTeamByName(teamSelected);
+                                if (playerSelected.getSalary() > t1.getBudget()) {
+                                    System.out.println("You cant afford this player, Pick Again");
+                                    continue;
+                                }
+                                boolean hasAllPostitions = false;
+                                for (String position : positionsNeeded) {
+                                    if (position.equals("")) {
+                                        counter3++;
+                                    }
+                                    if (counter3 == 9) {
+                                        hasAllPostitions = true;
+                                        break;
+                                    }
+                                }
+                                if (!hasAllPostitions) {
+                                    if (positionsNeeded.contains(playerSelected.getPosition())) {
+                                        positionsNeeded.remove(playerSelected.getPosition());
+                                        // Add the player to your team roster here
+                                    } else {
+                                        // Position was already filled or invalid, so skip and ask again
+                                        continue;
+                                    }
+                                }
+
+                                printOut(1, 0);
+                                break;
                             }
                         }
-                    }
-                    // 5. Handle Enter Key (Carriage return '\r' or Newline '\n')
-                    else if (inputValue == 13 || inputValue == 10) {
-                        playerSelected = players.get(currentSelection);
-                        printOut(1, 0);
-                        break;
                     }
                 }
             }
@@ -215,63 +449,64 @@ public class Draft {
     }
 
     private void teamSelect() throws IOException {
-        /*
-         * Loop through for every team adding them to a dicoanry and their index
-         * randomize who goes first then if it is the user they select a player if it is
-         * not the user you need to make a new file that stores teams the users and the
-         * bots where if it is not the user then the bot selects a player you need to
-         * make a ai file that selects players for bot team logically in the team file
-         * you need to generate teams their budgets and money they can spend on players
-         * you need to ensure that the team budgets are respected when selecting players
-         * and the highest will be the highest possible amount for every 15 players for
-         * each team and the lowest wil be the lowest possivle amount for every 15 plyer
-         * for eahc team then you need to make sure 150 players are in teh draft and 100
-         * will be free agents
-         * 
-         * The thing to do next is use the AiDraftSelect class to handle the bot's
-         * player selection logic.
-         */
         for (int i = 0; i < this.teamsSelection.length; i++) {
             teamIndexMap.put(this.teamsSelection[i], i);
         }
-
         List<String> keys = new ArrayList<>(teamIndexMap.keySet());
-
-        Integer random = (int) (Math.random() * this.teamsSelection.length) - 1;
+        int random = (int) (Math.random() * this.teamsSelection.length);
         String teamName = keys.get(random);
         if (teamName.equals(this.teamSelected)) {
             firstTeam = teamIndexMap.get(teamSelected);
         } else {
-            firstTeam = teamIndexMap.get(random);
+            firstTeam = teamIndexMap.get(teamName);
         }
     }
 
-    private int round(int teamIndex) throws IOException {
-        int userTurn = 0;
-        if (firstTeam < teamIndex) {
-            userTurn = teamIndex - firstTeam + 1;
-        } else if (firstTeam > teamIndex) {
-            userTurn = this.teamsSelection.length - firstTeam + teamIndex + 1;
-        } else if (firstTeam == teamIndex) {
-            userTurn = firstTeam;
+    private int round(int pickNumber) throws IOException {
+        int totalPicks = this.teamsSelection.length * 15;
+        if (pickNumber > totalPicks) {
+            return -1;
         }
-        for (int i = firstTeam - 1; i < this.teamsSelection.length; i++) {
-            if (count2 == 151) {
-                break;
-            }
-            if (i == this.teamsSelection.length - 1) {
-                i = 0;
+        return (firstTeam + pickNumber - 1) % this.teamsSelection.length;
+    }
+
+    private void results() {
+        for (Team t : teams) {
+
+            System.out.printf("""
+                    =============================
+                    %s    %d Players
+                    =============================
+
+                    """, t.getName().toUpperCase(), t.getPlayers().size());
+
+            for (String position : positions) {
+
+                System.out.printf("""
+                        ---------------------
+                        %s
+                        ---------------------
+                        """, position);
+
+                boolean foundPlayer = false;
+
+                for (Player p : t.getPlayers()) {
+
+                    if (p.getPosition().equals(position)) {
+                        System.out.println(p);
+                        foundPlayer = true;
+                    }
+                }
+
+                if (!foundPlayer) {
+                    System.out.println("No players drafted.");
+                }
+
+                System.out.println();
             }
 
-            Boolean isUserTurn = (i == userTurn - 1);
-
-            count2++;
-            if (isUserTurn) {
-                return userTurn;
-            } else {
-                return i;
-            }
+            System.out.println("\n");
         }
-        return 0;
+
     }
 }

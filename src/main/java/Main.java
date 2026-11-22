@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
 
-class Main {
+public class Main {
   public static Scanner scanner = new Scanner(System.in);
   public static String[] teams = { "Wall Street Bulls", "Silicon Valley Bears", "Corporate Raiders",
       "Blue Chip Ballers", "Penny Stock Pumas", "Day Trader Dynamos", "Executive Elites",
@@ -19,19 +19,21 @@ class Main {
   public static String teamSelected = "";
   public static ArrayList<Player> players;
 
-  public static void main() throws IOException {
+  public static void main(String[] args) throws IOException {
     greet();
     players = new ArrayList<>();
 
-    for (int i = 0; i < 250; i++) {
+    for (int i = 0; i < 150; i++) {
       players.add(new Player());
     }
-  }
 
-  public static void runDraft() throws IOException {
     Draft draft = new Draft(players, players.get(0), teamSelected, teamSelection);
 
     draft.run();
+    players.clear();
+    for (int i = 0; i < 100; i++) {
+      players.add(new Player());
+    }
   }
 
   public static void greet() throws IOException {
@@ -76,6 +78,7 @@ class Main {
     if (number == 1) {
       System.out.println("The team you have selected is: " + teamSelected);
     }
+
   }
 
   public static void clearTerminal() {
