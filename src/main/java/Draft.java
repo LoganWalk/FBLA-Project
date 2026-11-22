@@ -1,3 +1,4 @@
+
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import java.io.IOException;
@@ -6,7 +7,7 @@ import org.jline.utils.InfoCmp;
 import java.util.*;
 
 /* You need to make a skip round section that allows them to skip the round but they
- * have to end up with at least 11 players form the draft then all the players they need
+ * have to end up with at least 11 players from the draft then all the players they need
  * to fill for a 15 player team will be filled with players within the rating range of 50 to 60 */
 public class Draft {
     private ArrayList<Player> players;
@@ -20,9 +21,10 @@ public class Draft {
     private static int count3 = 0;
     private ArrayList<String> recentPicks = new ArrayList<>();
     private static Integer firstTeam = 0;
-    public static final String[] positions = { "Quarterback", "Running Back", "Wide Receiver",
-            "Tight End", "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker",
-            "Defensive Back" };
+    public static final String[] positions = {
+            "Quarterback", "Running Back", "Wide Receiver", "Tight End",
+            "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker", "Defensive Back"
+    };
     public ArrayList<String> positionsNeeded = new ArrayList<>(
             Arrays.asList("Quarterback", "Running Back", "Wide Receiver", "Tight End",
                     "Offensive Lineman", "Kicker", "Defensive Lineman", "Linebacker", "Defensive Back"));
@@ -38,8 +40,7 @@ public class Draft {
     public int logStart = 0;
     public int counter4 = 0;
 
-    public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected,
-            String[] teamsSelection) {
+    public Draft(ArrayList<Player> player, Player playerSelected, String teamSelected, String[] teamsSelection) {
         this.players = player;
         this.playerSelected = playerSelected;
         this.teamSelected = teamSelected;
@@ -90,12 +91,13 @@ public class Draft {
                 System.out.println("--- RECENT PICKS ---");
                 logStart = Math.max(0, recentPicks.size() - 10);
                 for (int k = logStart; k < recentPicks.size(); k++) {
-                    System.out.println("  " + recentPicks.get(k));
+                    System.out.println(" " + recentPicks.get(k));
                 }
                 System.out.println("--------------------");
             }
             Team t1 = getTeamByName(teamSelected);
             System.out.println("Your budget is: $" + t1.getBudget());
+
             int maxVisiblePlayers = 30;
             int totalPlayers = players.size();
             int startWindow = 0;
@@ -105,6 +107,7 @@ public class Draft {
             int endWindow = Math.min(startWindow + maxVisiblePlayers, totalPlayers);
             int globalIndex = 0;
             int printedCount = 0;
+
             if (currentSelection == -4) {
                 System.out.println(WHITE_BACKGROUND + BLACK_TEXT + "OUT OF MONEY" + RESET);
                 globalIndex++;
@@ -147,7 +150,6 @@ public class Draft {
                             %-6s
                             ----------------------
                             """, positions[j]);
-
                 }
                 if (group.size() == 0) {
                     System.out.println("NONE");
@@ -156,8 +158,8 @@ public class Draft {
                         displayedPlayers.add(group.get(i));
                         if (globalIndex >= startWindow && printedCount < maxVisiblePlayers) {
                             if (currentSelection == globalIndex) {
-                                System.out.print(WHITE_BACKGROUND + BLACK_TEXT + (i + 1) + ". " + group.get(i)
-                                        + " <---" + RESET);
+                                System.out.print(WHITE_BACKGROUND + BLACK_TEXT + (i + 1) + ". " + group.get(i) + " <---"
+                                        + RESET);
                             } else {
                                 System.out.print((i + 1) + ". " + group.get(i));
                             }
@@ -168,9 +170,7 @@ public class Draft {
                     }
                 }
             }
-        }
-
-        else if (number == 1) {
+        } else if (number == 1) {
             for (Team t : teams) {
                 if (t.getName().equals(teamSelected)) {
                     t.addPlayer(playerSelected);
@@ -182,22 +182,21 @@ public class Draft {
             }
             players.remove(playerSelected);
             System.out.println(getKeyByValue(teamIndexMap, turn) + " Selected: " + playerSelected);
-            recentPicks.add("Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + "(You)" + ": "
-                    + playerSelected);
+            recentPicks.add(
+                    "Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + "(You)" + ": " + playerSelected);
         } else if (number == 2) {
-
             for (Team t : teams) {
                 Team t1 = getTeamByName(teamSelected);
                 if (t.equals(t1)) {
-                    while (t.getPlayers().size() < 15) {
+                    int safetyAttempts = 0;
+                    while (t.getPlayers().size() < 15 && safetyAttempts < 500) {
+                        safetyAttempts++;
                         if (players.isEmpty()) {
                             break;
                         }
                         int random = (int) (Math.random() * (players.size()));
-                        boolean hasAllPostitions = false;
-                        if (positionsNeeded.isEmpty()) {
-                            hasAllPostitions = true;
-                        }
+                        boolean hasAllPostitions = positionsNeeded.isEmpty();
+
                         if (!hasAllPostitions) {
                             if (positionsNeeded.contains(players.get(random).getPosition())) {
                                 if (players.get(random).getSalary() <= t.getBudget()) {
@@ -206,11 +205,8 @@ public class Draft {
                                     t.addPlayer(players.get(random));
                                     positionsNeeded.remove(players.get(random).getPosition());
                                     players.remove(random);
-
                                 }
-                                // Add the player to your team roster here
                             } else {
-                                // Position was already filled or invalid, so skip and ask again
                                 continue;
                             }
                         } else {
@@ -225,77 +221,61 @@ public class Draft {
                 } else {
                     for (int i = t.getPlayers().size(); i < 15; i++) {
                         playerSelected = AiDraftSelect.getPlayerSelected(t, players);
-                        int budget = t.getBudget() - playerSelected.getSalary();
-                        t.setBudget(budget);
-                        t.addPlayer(playerSelected);
-                        players.remove(playerSelected);
+                        if (playerSelected != null) {
+
+                            int budget = t.getBudget() - playerSelected.getSalary();
+                            t.setBudget(budget);
+                            t.addPlayer(playerSelected);
+                            players.remove(playerSelected);
+                        }
                     }
                 }
             }
             Player generator = new Player();
-
             for (Team t : teams) {
-
                 // Make sure every position is filled
                 for (String position : positions) {
-
                     boolean hasPosition = false;
-
                     for (Player p : t.getPlayers()) {
                         if (p.getPosition().equals(position)) {
                             hasPosition = true;
                             break;
                         }
                     }
-
                     if (!hasPosition) {
-
                         Player lowestRated = null;
-
                         // Find a player at a position with multiple players
                         for (Player p : t.getPlayers()) {
-
                             int positionCount = 0;
-
                             for (Player p2 : t.getPlayers()) {
                                 if (p.getPosition().equals(p2.getPosition())) {
                                     positionCount++;
                                 }
                             }
-
                             if (positionCount > 1) {
-
-                                if (lowestRated == null ||
-                                        p.getRating() < lowestRated.getRating()) {
-
+                                if (lowestRated == null || p.getRating() < lowestRated.getRating()) {
                                     lowestRated = p;
                                 }
                             }
                         }
-
                         // Replace the lowest-rated extra player
                         if (lowestRated != null) {
                             t.getPlayers().remove(lowestRated);
                         }
-
                         t.addPlayer(generator.makeBaseCharacter(position));
                     }
                 }
-
                 // Fill remaining roster spots to 15
                 while (t.getPlayers().size() < 15) {
-
                     String position = positions[(int) (Math.random() * positions.length)];
-
                     t.addPlayer(generator.makeBaseCharacter(position));
                 }
             }
-
             results();
         } else if (number == 3) {
-
+            // Skip round placeholder
         } else if (number == 4) {
-
+            // Out of money placeholder
         }
     }
 
@@ -313,7 +293,6 @@ public class Draft {
             }
         }
         return t1;
-
     }
 
     public static <K, V> K getKeyByValue(Map<K, V> map, V targetValue) {
@@ -327,35 +306,40 @@ public class Draft {
 
     private void selectPlayer() throws IOException {
         teamSelect();
-        mainloop: while (true) {
-            count++;
-            turn = round(count);
-            if (turn == -1) {
-                System.out.println("THE DRAFT HAS ENDED");
-                break;
-            }
-            if (turn != teamIndexMap.get(teamSelected)) {
-                String currentTeamName = getKeyByValue(teamIndexMap, turn);
-                System.out.println(currentTeamName + " is selecting their player from the draft");
-                System.out.println("Looking for AI team: [" + getKeyByValue(teamIndexMap, turn)
-                        + "] | aiTeams size: " + aiTeams.size());
-                for (Team t : aiTeams) {
-                    if (t.getName().equals(currentTeamName)) {
-                        playerSelected = AiDraftSelect.getPlayerSelected(t, players);
-                        t.addPlayer(playerSelected);
-                        players.remove(playerSelected);
-                        int budget = t.getBudget() - playerSelected.getSalary();
-                        t.setBudget(budget);
-                        System.out.println(getKeyByValue(teamIndexMap, turn) + " Selected: " + playerSelected);
-                        recentPicks.add("Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + ": "
-                                + playerSelected);
-                        break;
-                    }
+        try (Terminal terminal = TerminalBuilder.terminal()) {
+            terminal.enterRawMode();
+            mainloop: while (true) {
+                count++;
+                turn = round(count);
+                if (turn == -1) {
+                    System.out.println("THE DRAFT HAS ENDED");
+                    break;
                 }
-            } else {
-                System.out.println("Your team is selecting");
-                try (Terminal terminal = TerminalBuilder.terminal()) {
-                    terminal.enterRawMode();
+                if (turn != teamIndexMap.get(teamSelected)) {
+                    String currentTeamName = getKeyByValue(teamIndexMap, turn);
+                    System.out.println(currentTeamName + " is selecting their player from the draft");
+                    System.out.println("Looking for AI team: [" + getKeyByValue(teamIndexMap, turn)
+                            + "] | aiTeams size: " + aiTeams.size());
+                    for (Team t : aiTeams) {
+                        if (t.getName().equals(currentTeamName)) {
+                            playerSelected = AiDraftSelect.getPlayerSelected(t, players);
+                            if (playerSelected != null) {
+                                t.addPlayer(playerSelected);
+                                players.remove(playerSelected);
+                                int budget = t.getBudget() - playerSelected.getSalary();
+                                t.setBudget(budget);
+                                System.out.println(getKeyByValue(teamIndexMap, turn) + " Selected: " + playerSelected);
+                                recentPicks.add("Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + ": "
+                                        + playerSelected);
+                            } else {
+                                recentPicks
+                                        .add("Pick #" + count + " - " + getKeyByValue(teamIndexMap, turn) + ": PASSED");
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    System.out.println("Your team is selecting");
                     int currentSelection = 0;
                     while (true) {
                         printOut(0, currentSelection);
@@ -418,26 +402,14 @@ public class Draft {
                                     System.out.println("You cant afford this player, Pick Again");
                                     continue;
                                 }
-                                boolean hasAllPostitions = false;
-                                for (String position : positionsNeeded) {
-                                    if (position.equals("")) {
-                                        counter3++;
-                                    }
-                                    if (counter3 == 9) {
-                                        hasAllPostitions = true;
-                                        break;
-                                    }
-                                }
+                                boolean hasAllPostitions = positionsNeeded.isEmpty();
                                 if (!hasAllPostitions) {
                                     if (positionsNeeded.contains(playerSelected.getPosition())) {
                                         positionsNeeded.remove(playerSelected.getPosition());
-                                        // Add the player to your team roster here
                                     } else {
-                                        // Position was already filled or invalid, so skip and ask again
                                         continue;
                                     }
                                 }
-
                                 printOut(1, 0);
                                 break;
                             }
@@ -452,7 +424,7 @@ public class Draft {
         for (int i = 0; i < this.teamsSelection.length; i++) {
             teamIndexMap.put(this.teamsSelection[i], i);
         }
-        List<String> keys = new ArrayList<>(teamIndexMap.keySet());
+        ArrayList<String> keys = new ArrayList<>(teamIndexMap.keySet());
         int random = (int) (Math.random() * this.teamsSelection.length);
         String teamName = keys.get(random);
         if (teamName.equals(this.teamSelected)) {
@@ -472,41 +444,30 @@ public class Draft {
 
     private void results() {
         for (Team t : teams) {
-
             System.out.printf("""
                     =============================
-                    %s    %d Players
+                    %s %d Players
                     =============================
-
                     """, t.getName().toUpperCase(), t.getPlayers().size());
-
             for (String position : positions) {
-
                 System.out.printf("""
                         ---------------------
                         %s
                         ---------------------
                         """, position);
-
                 boolean foundPlayer = false;
-
                 for (Player p : t.getPlayers()) {
-
                     if (p.getPosition().equals(position)) {
                         System.out.println(p);
                         foundPlayer = true;
                     }
                 }
-
                 if (!foundPlayer) {
                     System.out.println("No players drafted.");
                 }
-
                 System.out.println();
             }
-
             System.out.println("\n");
         }
-
     }
 }
