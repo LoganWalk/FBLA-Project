@@ -5,14 +5,22 @@ import java.io.IOException;
 public class Game {
     public static String[] player = Field.getPlayer();
     public static Field feild = new Field();
-    public static int count = 0;
-    public static String temp;
+
+    // Each player keeps the terrain tile underneath them independently.
+    // All 15 starting player positions are placed on green turf.
+    private static final String[] playerUnderlyingTiles = new String[15];
+
+    static {
+        for (int i = 0; i < playerUnderlyingTiles.length; i++) {
+            playerUnderlyingTiles[i] = Field.green[1];
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         callMovement();
     }
 
-    // Each blue player has a unique board value: BluePlayer0, BluePlayer1, etc.
+    // The active team contains players 0-10. Players 11-14 remain on the bench.
     public static int getPlayerIndex(String[] selectedPlayer) {
         String[][] team = Field.getTeam();
 
@@ -47,20 +55,33 @@ public class Game {
     }
 
     public static void move(String direction, int speed, int[] playerPosition) {
-        if (playerPosition == null || speed < 1) {
+        if (playerPosition == null || playerPosition.length < 2 || speed < 1 || direction == null) {
             return;
         }
 
+        int playerIndex = getPlayerIndex(player);
+        if (playerIndex == -1 || playerIndex >= playerUnderlyingTiles.length) {
+            return;
+        }
+
+        String[][] board = feild.getField();
         int row = playerPosition[0];
         int col = playerPosition[1];
+
+        if (row < 0 || row >= board.length || board[row] == null
+                || col < 0 || col >= board[row].length) {
+            return;
+        }
+
+        String playerTile = "BluePlayer" + playerIndex;
+
+        // Ignore stale positions or positions that do not contain the selected player.
+        if (!playerTile.equals(board[row][col])) {
+            return;
+        }
+
         int newRow = row;
         int newCol = col;
-        String[][] board = feild.getField();
-
-        if (count == 0) {
-            temp = board[playerPosition[0]][playerPosition[1]];
-            count++;
-        }
 
         if (direction.equals("left")) {
             newCol -= speed;
@@ -79,28 +100,21 @@ public class Game {
             return;
         }
 
-        if (newCol < 4 || newCol >= board[newRow].length - 3) {
+        if (board[newRow] == null || newCol < 4 || newCol >= board[newRow].length - 3) {
             return;
         }
 
         String destination = board[newRow][newCol];
 
         // Do not move onto another blue player.
-        if (destination.startsWith("BluePlayer")) {
+        if (destination == null || destination.startsWith("BluePlayer")) {
             return;
         }
 
-        int playerIndex = getPlayerIndex(player);
-        if (playerIndex == -1) {
-            return;
-        }
-
-        String temp2 = board[newRow][newCol];
-
-        // Move the player's identifier and preserve the tile underneath it.
-        board[newRow][newCol] = board[row][col];
-        board[row][col] = temp;
-        temp = temp2;
+        // Restore this player's previous terrain and remember the destination terrain.
+        board[row][col] = playerUnderlyingTiles[playerIndex];
+        playerUnderlyingTiles[playerIndex] = destination;
+        board[newRow][newCol] = playerTile;
 
         playerPosition[0] = newRow;
         playerPosition[1] = newCol;
@@ -144,13 +158,18 @@ public class Game {
     public static void switchPlayer() {
         String[][] team = Field.getTeam();
 
-        for (int i = 0; i < team.length; i++) {
-            if (player == team[i]) {
-                player = team[(i + 1) % team.length];
-                count = 0;
-                temp = null;
-                return;
-            }
+        if (team == null || team.length == 0) {
+            return;
         }
+
+        int currentPlayerIndex = getPlayerIndex(player);
+
+        if (currentPlayerIndex == -1) {
+            player = team[0];
+        } else {
+            player = team[(currentPlayerIndex + 1) % team.length];
+        }
+
+        // Do not reset terrain tracking: every player keeps their own saved tile.
     }
 }
