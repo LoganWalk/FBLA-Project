@@ -5,6 +5,8 @@ import java.io.IOException;
 public class Game {
     public static String[] player = Field.getPlayer();
     public static Field feild = new Field();
+    public static int count = 0;
+    public static String temp;
 
     public static void main(String[] args) throws IOException {
         callMovement();
@@ -53,6 +55,12 @@ public class Game {
         int col = playerPosition[1];
         int newRow = row;
         int newCol = col;
+        String[][] board = feild.getField();
+
+        if (count == 0) {
+            temp = board[playerPosition[0]][playerPosition[1]];
+            count++;
+        }
 
         if (direction.equals("left")) {
             newCol -= speed;
@@ -65,8 +73,6 @@ public class Game {
         } else {
             return;
         }
-
-        String[][] board = feild.getField();
 
         // Keep the existing three/four-tile field boundaries.
         if (newRow < 4 || newRow >= board.length - 4) {
@@ -89,9 +95,15 @@ public class Game {
             return;
         }
 
+        String temp2 = board[newRow][newCol];
+
         // Move the player's identifier and preserve the tile underneath it.
-        board[newRow][newCol] = "BluePlayer" + playerIndex;
-        board[row][col] = destination;
+        board[newRow][newCol] = board[row][col];
+        board[row][col] = temp;
+        temp = temp2;
+
+        playerPosition[0] = newRow;
+        playerPosition[1] = newCol;
     }
 
     public static void clearTerminal() {
@@ -135,6 +147,8 @@ public class Game {
         for (int i = 0; i < team.length; i++) {
             if (player == team[i]) {
                 player = team[(i + 1) % team.length];
+                count = 0;
+                temp = null;
                 return;
             }
         }
