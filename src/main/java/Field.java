@@ -276,6 +276,8 @@ public class Field {
                 String tile = this.feild[i][j];
                 if (tile.startsWith("BluePlayer")) {
                     output.append(blue[1]);
+                }else if(tile.startsWith("PurplePlayer")){
+                    output.append(purple);
                 } else {
                     output.append(tile);
                 }

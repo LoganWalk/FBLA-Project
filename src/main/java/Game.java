@@ -162,8 +162,6 @@ public class Game {
         }
 
         selectedPlayerIndex = (selectedPlayerIndex + 1) % team.length;
-        Field.bluePlayerTiles.get(selectedPlayerIndex - 1).setColor(blue);
-        Field.bluePlayerTiles.get(selectedPlayerIndex).setColor(purple);
         player = team[selectedPlayerIndex];
 
         // Do not reset terrain tracking: every player keeps their own saved tile.
