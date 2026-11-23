@@ -266,6 +266,10 @@ public class Field {
     }
 
     public void printField() {
+        printField(null);
+    }
+
+    public void printField(String selectedPlayerTile) {
 
         StringBuilder output = new StringBuilder();
 
@@ -275,8 +279,12 @@ public class Field {
             for (int j = 0; j < this.feild[i].length; j++) {
                 String tile = this.feild[i][j];
                 if (tile.startsWith("BluePlayer")) {
-                    output.append(blue[1]);
-                }else if(tile.startsWith("PurplePlayer")){
+                    if (tile.equals(selectedPlayerTile)) {
+                        output.append(purple);
+                    } else {
+                        output.append(blue[1]);
+                    }
+                } else if (tile.startsWith("PurplePlayer")) {
                     output.append(purple);
                 } else {
                     output.append(tile);
