@@ -82,11 +82,6 @@ public class Game {
 
         int newRow = row;
         int newCol = col;
-        String[][] board = feild.getField();
-        if (count == 0) {
-            temp = board[playerPosition[0]][playerPosition[1]];
-            count++;
-        }
 
         if (direction.equals("left")) {
             newCol -= speed;
