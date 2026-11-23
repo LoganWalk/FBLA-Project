@@ -58,7 +58,7 @@ public class Field {
             yellowTiles.add(new Tile("Yellow"));
 
         for (int i = 0; i < 15; i++)
-            bluePlayerTiles.add(new Tile("Blue"));
+            bluePlayerTiles.add(new Tile("BluePlayer" + i));
 
         for (int i = 0; i < 3; i++)
             bluePoleTiles.add(new Tile("Blue"));
@@ -264,7 +264,12 @@ public class Field {
 
         for (int i = 0; i < this.feild.length; i++) {
             for (int j = 0; j < this.feild[i].length; j++) {
-                output.append(this.feild[i][j]);
+                String tile = this.feild[i][j];
+                if (tile.startsWith("BluePlayer")) {
+                    output.append(blue[1]);
+                } else {
+                    output.append(tile);
+                }
             }
             output.append("\n");
         }
