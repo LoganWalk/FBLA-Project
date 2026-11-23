@@ -10,8 +10,8 @@ public class Field {
     public static final String[] black = { "Black", "\u001b[40m  \u001b[0m" };
     public static final String[] green = { "Green", "\u001b[48;5;22m  \u001b[0m", "Green" };
     public static final String[] white = { "White", "\u001b[47m  \u001b[0m" };
-    public static final String[] yellow = { "Yellow", "\\u001b[48;5;220m  \\u001b[0m" };
-    public static final String[] red = { "Red", "\\u001b[48;5;88m  \\u001b[0m" };
+    public static final String[] yellow = { "Yellow", "\u001b[48;5;220m  \u001b[0m" };
+    public static final String[] red = { "Red", "\u001b[48;5;88m  \u001b[0m" };
     public static String[] blue1 = { "Blue1", "\\u001b[48;5;93m  \\u001b[0m", "0", "1" };
     public static final String[] blue = { "Blue", "\u001b[48;5;18m  \u001b[0m" };
     public static String[] blue2 = { "Blue2", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
@@ -46,30 +46,30 @@ public class Field {
     public Field() {
 
         for (int i = 0; i < 6711; i++)
-            greenTiles.add(new Tile("Green"));
+            greenTiles.add(new Tile(green[1]));
 
         for (int i = 0; i < 1929; i++)
-            whiteTiles.add(new Tile("White"));
+            whiteTiles.add(new Tile(white[1]));
 
         for (int i = 0; i < 414; i++)
-            blackTiles.add(new Tile("Black"));
+            blackTiles.add(new Tile(black[1]));
 
         for (int i = 0; i < 26; i++)
-            yellowTiles.add(new Tile("Yellow"));
+            yellowTiles.add(new Tile(yellow[1]));
 
         for (int i = 0; i < 15; i++)
             bluePlayerTiles.add(new Tile("BluePlayer" + i));
 
         for (int i = 0; i < 3; i++)
-            bluePoleTiles.add(new Tile("Blue"));
+            bluePoleTiles.add(new Tile(blue[1]));
 
         for (int i = 0; i < 15; i++)
-            redPlayerTiles.add(new Tile("Red"));
+            redPlayerTiles.add(new Tile(red[1]));
 
         for (int i = 0; i < 3; i++)
-            redPoleTiles.add(new Tile("Red"));
+            redPoleTiles.add(new Tile(red[1]));
 
-        brownTiles.add(new Tile("Brown"));
+        brownTiles.add(new Tile(brown[1]));
     
 
         this.feild = createField();
