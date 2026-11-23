@@ -20,3 +20,6 @@ Move movement and related methods into the game folder, and link the player-swit
 Reconfigure and clean up the game and field files. In the game file, add a method to create characters with a base speed of 1 and assign each a color. Add a method to calculate speed.
 
 Make the field depend on objects and constructor parameters. Represent each pixel as an object assigned to a player, and configure the links between blocks.
+
+
+Next thing to do is make blocking and tackling, then work on main menu and bracket
