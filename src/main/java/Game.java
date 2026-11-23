@@ -96,12 +96,9 @@ public class Game {
             return;
         }
 
-        // Keep the existing three/four-tile field boundaries.
-        if (newRow < 4 || newRow >= board.length - 4) {
-            return;
-        }
-
-        if (board[newRow] == null || newCol < 4 || newCol >= board[newRow].length - 3) {
+        // Only prevent movement outside the actual board.
+        if (newRow < 0 || newRow >= board.length || board[newRow] == null
+                || newCol < 0 || newCol >= board[newRow].length) {
             return;
         }
 
