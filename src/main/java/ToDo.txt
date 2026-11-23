@@ -13,3 +13,5 @@ Work on structring and coloring the draft with colored background formatted stri
 make a button used to switch player and make something indicate which players is selected.
 
 also move the move and what not methods to the game folder and the switch player button and link it to the feild file.
+
+implement who has the ball tracker and who the user has selected tracker, also make sure the movement doesn't go off color. then also make it to where the characters with the ball can be tackled and the other ones can't 
