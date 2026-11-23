@@ -7,7 +7,7 @@ public class Game {
     public static Field feild = new Field();
     private static int selectedPlayerIndex = 0;
     public static String purple = Field.purple;
-    public static String blue = Field.blue3[1];
+    public static String blue = Field.blue[1];
 
     // Each player keeps the terrain tile underneath them independently.
     // All 15 starting player positions are placed on green turf.
@@ -127,26 +127,26 @@ public class Game {
     public static void callMovement() throws IOException {
         try (Terminal terminal = TerminalBuilder.terminal()) {
             terminal.enterRawMode();
-            feild.printField();
+            feild.printField("BluePlayer" + selectedPlayerIndex);
 
             while (true) {
                 int inputValue = terminal.reader().read();
 
                 if (inputValue == 'a') {
                     move("left", 1, findPlayer(player));
-                    feild.printField();
+                    feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'd') {
                     move("right", 1, findPlayer(player));
-                    feild.printField();
+                    feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'w') {
                     move("up", 1, findPlayer(player));
-                    feild.printField();
+                    feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 's') {
                     move("down", 1, findPlayer(player));
-                    feild.printField();
+                    feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'e') {
                     switchPlayer();
-                    feild.printField();
+                    feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'q' || inputValue == -1) {
                     break;
                 }
@@ -162,8 +162,6 @@ public class Game {
         }
 
         selectedPlayerIndex = (selectedPlayerIndex + 1) % team.length;
-        Field.bluePlayerTiles.get(selectedPlayerIndex - 1).setColor(blue);
-        Field.bluePlayerTiles.get(selectedPlayerIndex).setColor(purple);
         player = team[selectedPlayerIndex];
 
         // Do not reset terrain tracking: every player keeps their own saved tile.
