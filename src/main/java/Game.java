@@ -3,8 +3,9 @@ import org.jline.terminal.TerminalBuilder;
 import java.io.IOException;
 
 public class Game {
-    public static String[] player = Field.getPlayer();
+    public static String[] player = Field.getTeam()[0];
     public static Field feild = new Field();
+    private static int selectedPlayerIndex = 0;
 
     // Each player keeps the terrain tile underneath them independently.
     // All 15 starting player positions are placed on green turf.
@@ -59,8 +60,8 @@ public class Game {
             return;
         }
 
-        int playerIndex = getPlayerIndex(player);
-        if (playerIndex == -1 || playerIndex >= playerUnderlyingTiles.length) {
+        int playerIndex = selectedPlayerIndex;
+        if (playerIndex < 0 || playerIndex >= playerUnderlyingTiles.length) {
             return;
         }
 
@@ -107,7 +108,7 @@ public class Game {
         String destination = board[newRow][newCol];
 
         // Do not move onto another blue player.
-        if (destination == null || destination.startsWith("BluePlayer")) {
+        if (destination == null) {
             return;
         }
 
@@ -162,13 +163,8 @@ public class Game {
             return;
         }
 
-        int currentPlayerIndex = getPlayerIndex(player);
-
-        if (currentPlayerIndex == -1) {
-            player = team[0];
-        } else {
-            player = team[(currentPlayerIndex + 1) % team.length];
-        }
+        selectedPlayerIndex = (selectedPlayerIndex + 1) % team.length;
+        player = team[selectedPlayerIndex];
 
         // Do not reset terrain tracking: every player keeps their own saved tile.
     }
