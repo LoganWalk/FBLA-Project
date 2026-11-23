@@ -6,7 +6,7 @@ public class Game {
     public static String[] player = Field.getPlayer();
     public static Field feild = new Field();
     public static int count = 0;
-    public static String temp = "";
+    public static String temp;
 
     public static void main(String[] args) throws IOException {
         callMovement();
@@ -103,7 +103,6 @@ public class Game {
 
         playerPosition[0] = newRow;
         playerPosition[1] = newCol;
-
     }
 
     public static void clearTerminal() {
@@ -147,6 +146,8 @@ public class Game {
         for (int i = 0; i < team.length; i++) {
             if (player == team[i]) {
                 player = team[(i + 1) % team.length];
+                count = 0;
+                temp = null;
                 return;
             }
         }
