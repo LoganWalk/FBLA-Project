@@ -6,6 +6,8 @@ public class Game {
     public static String[] player = Field.getTeam()[0];
     public static Field feild = new Field();
     private static int selectedPlayerIndex = 0;
+    public static String purple = Field.purple;
+    public static String blue = Field.blue3[1];
 
     // Each player keeps the terrain tile underneath them independently.
     // All 15 starting player positions are placed on green turf.
@@ -80,7 +82,6 @@ public class Game {
         if (!playerTile.equals(board[row][col])) {
             return;
         }
-
         int newRow = row;
         int newCol = col;
 
@@ -161,6 +162,8 @@ public class Game {
         }
 
         selectedPlayerIndex = (selectedPlayerIndex + 1) % team.length;
+        Field.bluePlayerTiles.get(selectedPlayerIndex - 1).setColor(blue);
+        Field.bluePlayerTiles.get(selectedPlayerIndex).setColor(purple);
         player = team[selectedPlayerIndex];
 
         // Do not reset terrain tracking: every player keeps their own saved tile.

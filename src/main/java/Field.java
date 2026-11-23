@@ -39,6 +39,8 @@ public class Field {
     public static ArrayList<Tile> redPoleTiles = new ArrayList<>();
     public static ArrayList<Tile> brownTiles = new ArrayList<>();
 
+    public static String purple = "\u001b[48;5;93m  \u001b[0m";
+
     public String[][] feild;;
     public int speed = 2;
     public static String[] player = blue1;
