@@ -1,29 +1,45 @@
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Field {
     public static final String reset = "\u001b[0m";
     public static final String[] black = { "Black", "\u001b[40m  \u001b[0m" };
-    public static final String[] green = { "Green", "\u001b[48;5;22m  \u001b[0m" };
+    public static final String[] green = { "Green", "\u001b[48;5;22m  \u001b[0m", "Green" };
     public static final String[] white = { "White", "\u001b[47m  \u001b[0m" };
-    public static final String[] yellow = { "Yellow", "\u001b[48;5;220m  \u001b[0m" };
-    public static final String[] red = { "Red", "\u001b[48;5;88m  \u001b[0m" };
-    public static final String[] blue1 = { "Blue1", "\u001b[48;5;18m  \u001b[0m" };
+    public static final String[] yellow = { "Yellow", "\\u001b[48;5;220m  \\u001b[0m" };
+    public static final String[] red = { "Red", "\\u001b[48;5;88m  \\u001b[0m" };
+    public static String[] blue1 = { "Blue1", "\\u001b[48;5;93m  \\u001b[0m", "0", "1" };
     public static final String[] blue = { "Blue", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue2 = { "Blue2", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue3 = { "Blue3", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue4 = { "Blue4", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue5 = { "Blue5", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue6 = { "Blue6", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue7 = { "Blue7", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue8 = { "Blue8", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue9 = { "Blue9", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue10 = { "Blue10", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] blue11 = { "Blue11", "\u001b[48;5;18m  \u001b[0m" };
-    public static final String[] brown = { "Brown", "\u001b[48;5;94m  \u001b[0m" };
+    public static String[] blue2 = { "Blue2", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue3 = { "Blue3", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue4 = { "Blue4", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue5 = { "Blue5", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue6 = { "Blue6", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue7 = { "Blue7", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue8 = { "Blue8", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue9 = { "Blue9", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue10 = { "Blue10", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] blue11 = { "Blue11", "\u001b[48;5;18m  \u001b[0m", "0", "0" };
+    public static String[] brown = { "Brown", "\u001b[48;5;94m  \u001b[0m" };
 
-    public static String[][][] feild = {
+    public static String[][] blueTeam = { blue1, blue2, blue3, blue4, blue5, blue6, blue7, blue8, blue9, blue10,
+            blue11 };
+
+    public static ArrayList<Tile> greenTiles = new ArrayList<>();
+    public static ArrayList<Tile> whiteTiles = new ArrayList<>();
+    public static ArrayList<Tile> blackTiles = new ArrayList<>();
+    public static ArrayList<Tile> yellowTiles = new ArrayList<>();
+    public static ArrayList<Tile> bluePlayerTiles = new ArrayList<>();
+    public static ArrayList<Tile> bluePoleTiles = new ArrayList<>();
+    public static ArrayList<Tile> redPlayerTiles = new ArrayList<>();
+    public static ArrayList<Tile> redPoleTiles = new ArrayList<>();
+    public static ArrayList<Tile> brownTiles = new ArrayList<>();
+
+    public String[][][] feild = {
 
             // Vertical white lines mark the 5-yard lines across the field.
             // Yard-line labels are placed directly beside the white markers in the first
@@ -95,19 +111,46 @@ public class Field {
     // @formatter:on
     };
     public int speed = 2;
+    public static String[] player = blue1;
 
-    public static void main(String[] args) throws IOException {
-        callMovement();
+    public Field() {
+
+        for (int i = 0; i < 6711; i++)
+            greenTiles.add(new Tile("Green"));
+
+        for (int i = 0; i < 1929; i++)
+            whiteTiles.add(new Tile("White"));
+
+        for (int i = 0; i < 414; i++)
+            blackTiles.add(new Tile("Black"));
+
+        for (int i = 0; i < 26; i++)
+            yellowTiles.add(new Tile("Yellow"));
+
+        for (int i = 0; i < 15; i++)
+            bluePlayerTiles.add(new Tile("Blue"));
+
+        for (int i = 0; i < 3; i++)
+            bluePoleTiles.add(new Tile("Blue"));
+
+        for (int i = 0; i < 15; i++)
+            redPlayerTiles.add(new Tile("Red"));
+
+        for (int i = 0; i < 3; i++)
+            redPoleTiles.add(new Tile("Red"));
+
+        brownTiles.add(new Tile("Brown"));
     }
 
-    public static void printField() {
+    public void printField() {
+
         StringBuilder output = new StringBuilder();
 
         output.append("\033[H\033[2J");
 
-        for (int i = 0; i < feild.length; i++) {
-            for (int j = 0; j < feild[i].length; j++) {
-                output.append(feild[i][j][1]);
+        for (int i = 0; i < this.feild.length; i++) {
+            for (int j = 0; j < this.feild[i].length; j++) {
+                output.append(this.feild[i][j][1]);
             }
             output.append("\n");
         }
@@ -116,107 +159,33 @@ public class Field {
         System.out.flush();
     }
 
-    public static int[] findPlayer(String[] player) {
-        for (int i = 0; i < feild.length; i++) {
-            for (int j = 0; j < feild[i].length; j++) {
-                if (feild[i][j] == player) {
-                    return new int[] { i, j };
-                }
-            }
-        }
-        return null;
-    }
-
-    public static void move(String direction, int speed, int[] playerPosition) throws IOException {
-
-        if (playerPosition == null) {
-            return;
-        }
-
-        int row = playerPosition[0];
-        int col = playerPosition[1];
-
-        int newRow = row;
-        int newCol = col;
-
-        if (direction.equals("left")) {
-            newCol -= speed;
-
-        } else if (direction.equals("right")) {
-            newCol += speed;
-
-        } else if (direction.equals("up")) {
-            newRow -= speed;
-
-        } else if (direction.equals("down")) {
-            newRow += speed;
-
-        } else {
-            return;
-        }
-
-        // Check field boundaries
-        if (newRow < 4 || newRow >= feild.length - 4) {
-            return;
-        }
-
-        if (newCol < 4 || newCol >= feild[newRow].length - 3) {
-            return;
-        }
-
-        // Move player
-        String[] temp = feild[row][col];
-        String[] temp2 = feild[newRow][newCol];
-
-        feild[row][col] = temp2;
-        feild[newRow][newCol] = temp;
-
-        // Update player's stored position
-        playerPosition[0] = newRow;
-        playerPosition[1] = newCol;
-    }
-
     public static void clearTerminal() {
         System.out.println("\033[H\033[2J\033[3J");
         System.out.flush();
     }
 
-    public static void callMovement() throws IOException {
-        int count = 0;
-        try (Terminal terminal = TerminalBuilder.terminal()) {
-            terminal.enterRawMode();
-            while (true) {
-                while (true) {
-                    if (count == 0) {
-                        printField();
-                        count++;
-                    }
-                    int inputValue = terminal.reader().read();
-                    if (inputValue == 'a') {
-                        move("left", 2, findPlayer(blue2));
-                        printField();
-                        break;
-                    } else if (inputValue == 'd') {
-                        move("right", 2, findPlayer(blue2));
-                        printField();
-                        break;
-                    } else if (inputValue == 'w') {
-                        move("up", 2, findPlayer(blue2));
-                        printField();
-                        break;
-                    } else if (inputValue == 's') {
-                        move("down", 2, findPlayer(blue2));
-                        printField();
-                        break;
-                    } else if (inputValue == 'q') {
-                        terminal.close();
-                        System.exit(0);
-                    }
+    public String[][][] getField() {
+        return this.feild;
+    }
 
-                }
-            }
-        }
+    public void setField(String[][][] field2) {
+        this.feild = field2;
+    }
 
+    public static String[] getPlayer() {
+        return player;
+    }
+
+    public static void setPlayer(String[] player2) {
+        player = player2;
+    }
+
+    public static String[][] getTeam() {
+        return blueTeam;
+    }
+
+    public static void setColor(String[] player, String color) {
+        player[1] = color;
     }
 
 }

@@ -4,10 +4,27 @@
 
 
 
+
+
+
 Work on free agents and seqsuqinc after draft and ranking and listing free agents
 
 Work on structring and coloring the draft with colored background formatted strings and string builder
 
 
 
-make a button used to switch player and make something indicate which players is selected.
+
+
+implement who has the ball tracker and who the user has selected tracker, also make sure the movement doesn't go off color. then also make it to where the characters with the ball can be tackled and the other ones can't 
+
+Also add in a speed calculator and figure out how to make each pixel an object adn assgin them a player.
+
+
+Recongiufre the feid and game files and clean them up.
+
+In the game file make a method that creates characters, where you give them all a base speed of 1 and give them a color and of such. 
+then make the feild file fully dependetn on bojetcs and the contrustor.
+
+then make a method in the game file that cualtulates speed
+
+also congifure the linking of the blocks and make the feild depdendent on constructor parameters.
