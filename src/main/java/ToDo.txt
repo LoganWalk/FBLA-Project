@@ -11,3 +11,5 @@ Work on structring and coloring the draft with colored background formatted stri
 
 
 make a button used to switch player and make something indicate which players is selected.
+
+also move the move and what not methods to the game folder and the switch player button and link it to the feild file.
