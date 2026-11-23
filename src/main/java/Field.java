@@ -57,8 +57,17 @@ public class Field {
         for (int i = 0; i < 26; i++)
             yellowTiles.add(new Tile(yellow[1]));
 
-        for (int i = 0; i < 15; i++)
-            bluePlayerTiles.add(new Tile("BluePlayer" + i));
+        // The first four positions are bench players (11-14).
+        // The remaining positions use active player IDs 0-10.
+        String[] playerTileIds = {
+                "BluePlayer12", "BluePlayer11", "BluePlayer14", "BluePlayer13",
+                "BluePlayer4", "BluePlayer5", "BluePlayer6", "BluePlayer7",
+                "BluePlayer1", "BluePlayer8", "BluePlayer0", "BluePlayer9",
+                "BluePlayer10", "BluePlayer3", "BluePlayer2"
+        };
+
+        for (String playerTileId : playerTileIds)
+            bluePlayerTiles.add(new Tile(playerTileId));
 
         for (int i = 0; i < 3; i++)
             bluePoleTiles.add(new Tile(blue[1]));
