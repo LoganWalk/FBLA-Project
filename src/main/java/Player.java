@@ -5,6 +5,7 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
 class Player {
   // possibly introduce more posistions for more complexity
@@ -78,7 +79,7 @@ class Player {
       "hitPower", "blitzing", "zoneCoverage", "manCoverage", "throwUnderPressurePower",
       "throwUnderPressureAccuracy", "blockPower", "jukeMoves", "jumping" };
 
-  private Map<String, Integer> stats = new HashMap<>();
+  private LinkedHashMap<String, Integer> stats = new LinkedHashMap<>();
 
   public Player() {
     this.name = generateName();
@@ -144,7 +145,7 @@ class Player {
 
   // "Quarterback", "Running Back", "Wide Receiver","Tight End", "Offensive
   // Lineman", "Kicker", "Defensive Lineman", "Linebacker","Defensive Back"
-  public Map<String, Integer> generateStats() {
+  public LinkedHashMap<String, Integer> generateStats() {
     String[] specialStats;
     String[] basicStats;
     String[] belowStats;
@@ -404,7 +405,7 @@ class Player {
     Player basePlayer = new Player();
 
     // Give the player 50 in every stat
-    HashMap<String, Integer> baseStats = new HashMap<>();
+    LinkedHashMap<String, Integer> baseStats = new LinkedHashMap<>();
 
     for (String stat : this.stats.keySet()) {
       baseStats.put(stat, 50);
@@ -459,6 +460,14 @@ class Player {
         randomPlayer.rating);
 
     return randomPlayer;
+  }
+
+  public int getSpeed() {
+    return this.stats.get("speed");
+  }
+
+  public void setSpeed(int number) {
+    this.stats.replace("speed", number);
   }
 
 }

@@ -1,25 +1,29 @@
-
-
-
-
-
-
-
-
-
 Work on free agents and seqsuqinc after draft and ranking and listing free agents
 
 Work on structring and coloring the draft with colored background formatted strings and string builder
 
 
 
-Add a button to switch the selected player and an indicator showing which player is selected. Track both the selected player and the player with the ball. Keep movement within each player's color area, and allow only the player with the ball to be tackled.
-
-Move movement and related methods into the game folder, and link the player-switching button to the field.
-
-Reconfigure and clean up the game and field files. In the game file, add a method to create characters with a base speed of 1 and assign each a color. Add a method to calculate speed.
-
-Make the field depend on objects and constructor parameters. Represent each pixel as an object assigned to a player, and configure the links between blocks.
-
-
 Next thing to do is make blocking and tackling, then work on main menu and bracket
+
+
+use thread.sleep with speed.
+
+make sure there are 11 red players on the feild
+
+use the thread.speed invidulauy for each movment like where it says new Row += 1;
+
+add a delay above snd below, this will help acount for agility.
+
+make a method to calculate agility. 
+make a method for jumping.
+start making an method for stamina that will mark down out 1 for length of stamina and then can regenerate and basically slows down the player with the speed delay added to the stamina delay which rhe stamina delay would be 100 - stamina rating so the equation would be (int)(speedDelay + (100 - staminaRating)), do the same for agility so this is what the equation would be (int)(agilityDelay + (100-stamina)).
+
+
+--Important-- First Priority 
+Assign a player and tile to a character and work on positioning based off character position.
+
+
+
+
+

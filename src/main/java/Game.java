@@ -1,13 +1,19 @@
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public class Game {
     public static String[] player = Field.getTeam()[0];
     public static Field feild = new Field();
     private static int selectedPlayerIndex = 0;
-    public static String purple = Field.purple;
+    public static String purple = Field.orange;
     public static String blue = Field.blue[1];
+    public static int count = 0;
+    public static int count2 = 0;
+    public static Player player2 = new Player();
 
     // Each player keeps the terrain tile underneath them independently.
     // All 15 starting player positions are placed on green turf.
@@ -19,7 +25,8 @@ public class Game {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        player2.setSpeed(99);
         callMovement();
     }
 
@@ -57,8 +64,8 @@ public class Game {
         return null;
     }
 
-    public static void move(String direction, int speed, int[] playerPosition) {
-        if (playerPosition == null || playerPosition.length < 2 || speed < 1 || direction == null) {
+    public static void move(String direction, int speed, int[] playerPosition) throws InterruptedException {
+        if (playerPosition == null || playerPosition.length < 2 || direction == null) {
             return;
         }
 
@@ -84,15 +91,18 @@ public class Game {
         }
         int newRow = row;
         int newCol = col;
-
         if (direction.equals("left")) {
-            newCol -= speed;
+            Thread.sleep((int) (speed / 2));
+            newCol -= 1;
+            Thread.sleep((int) (speed / 2));
         } else if (direction.equals("right")) {
-            newCol += speed;
+            Thread.sleep((int) (speed / 2));
+            newCol += 1;
+            Thread.sleep((int) (speed / 2));
         } else if (direction.equals("up")) {
-            newRow -= speed;
+            newRow -= 1;
         } else if (direction.equals("down")) {
-            newRow += speed;
+            newRow += 1;
         } else {
             return;
         }
@@ -124,7 +134,7 @@ public class Game {
         System.out.flush();
     }
 
-    public static void callMovement() throws IOException {
+    public static void callMovement() throws IOException, InterruptedException {
         try (Terminal terminal = TerminalBuilder.terminal()) {
             terminal.enterRawMode();
             feild.printField("BluePlayer" + selectedPlayerIndex);
@@ -133,16 +143,16 @@ public class Game {
                 int inputValue = terminal.reader().read();
 
                 if (inputValue == 'a') {
-                    move("left", 1, findPlayer(player));
+                    move("left", calculateSpeed(player2), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'd') {
-                    move("right", 1, findPlayer(player));
+                    move("right", calculateSpeed(player2), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'w') {
-                    move("up", 1, findPlayer(player));
+                    move("up", calculateSpeed(player2), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 's') {
-                    move("down", 1, findPlayer(player));
+                    move("down", calculateSpeed(player2), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'e') {
                     switchPlayer();
@@ -154,7 +164,8 @@ public class Game {
         }
     }
 
-    public static void switchPlayer() {
+    public static void switchPlayer() throws InterruptedException {
+        Thread.sleep(50);
         String[][] team = Field.getTeam();
 
         if (team == null || team.length == 0) {
@@ -165,5 +176,16 @@ public class Game {
         player = team[selectedPlayerIndex];
 
         // Do not reset terrain tracking: every player keeps their own saved tile.
+        Thread.sleep(50);
+    }
+
+    public static int calculateSpeed(Player player) {
+        int delaySpeed = 0;
+
+        int playerSpeedRating = player.getSpeed();
+
+        delaySpeed = (int) ((1000 - (playerSpeedRating * 10)));
+
+        return delaySpeed;
     }
 }

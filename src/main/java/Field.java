@@ -1,6 +1,9 @@
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -39,11 +42,13 @@ public class Field {
     public static ArrayList<Tile> redPoleTiles = new ArrayList<>();
     public static ArrayList<Tile> brownTiles = new ArrayList<>();
 
-    public static String purple = "\u001b[48;5;93m  \u001b[0m";
+    public static String orange = "\u001B[48;5;208m  \u001B[0m";
 
     public String[][] feild;;
     public int speed = 2;
     public static String[] player = blue1;
+    private final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+    private final StringBuilder output = new StringBuilder();
 
     public Field() {
 
@@ -62,9 +67,9 @@ public class Field {
         // The first four positions are bench players (11-14).
         // The remaining positions use active player IDs 0-10.
         String[] playerTileIds = {
-                "BluePlayer12", "BluePlayer7", "BluePlayer14", "BluePlayer13",
+                "BluePlayer12", "BluePlayer11", "BluePlayer14", "BluePlayer13",
                 "BluePlayer4", "BluePlayer5", "BluePlayer6", "BluePlayer1",
-                "BluePlayer11", "BluePlayer8", "BluePlayer9", "BluePlayer10",
+                "BluePlayer7", "BluePlayer8", "BluePlayer9", "BluePlayer10",
                 "BluePlayer0", "BluePlayer2", "BluePlayer3"
         };
 
@@ -263,43 +268,54 @@ public class Field {
             { blackTiles.get(265).getColor(), greenTiles.get(6570).getColor(), greenTiles.get(6571).getColor(), greenTiles.get(6572).getColor(), greenTiles.get(6573).getColor(), greenTiles.get(6574).getColor(), greenTiles.get(6575).getColor(), greenTiles.get(6576).getColor(), greenTiles.get(6577).getColor(), greenTiles.get(6578).getColor(), greenTiles.get(6579).getColor(), greenTiles.get(6580).getColor(), greenTiles.get(6581).getColor(), greenTiles.get(6582).getColor(), greenTiles.get(6583).getColor(), greenTiles.get(6584).getColor(), greenTiles.get(6585).getColor(), greenTiles.get(6586).getColor(), greenTiles.get(6587).getColor(), greenTiles.get(6588).getColor(), greenTiles.get(6589).getColor(), greenTiles.get(6590).getColor(), greenTiles.get(6591).getColor(), greenTiles.get(6592).getColor(), greenTiles.get(6593).getColor(), greenTiles.get(6594).getColor(), greenTiles.get(6595).getColor(), greenTiles.get(6596).getColor(), greenTiles.get(6597).getColor(), greenTiles.get(6598).getColor(), greenTiles.get(6599).getColor(), greenTiles.get(6600).getColor(), greenTiles.get(6601).getColor(), greenTiles.get(6602).getColor(), greenTiles.get(6603).getColor(), greenTiles.get(6604).getColor(), greenTiles.get(6605).getColor(), greenTiles.get(6606).getColor(), greenTiles.get(6607).getColor(), greenTiles.get(6608).getColor(), greenTiles.get(6609).getColor(), greenTiles.get(6610).getColor(), greenTiles.get(6611).getColor(), greenTiles.get(6612).getColor(), greenTiles.get(6613).getColor(), greenTiles.get(6614).getColor(), greenTiles.get(6615).getColor(), greenTiles.get(6616).getColor(), greenTiles.get(6617).getColor(), greenTiles.get(6618).getColor(), greenTiles.get(6619).getColor(), greenTiles.get(6620).getColor(), greenTiles.get(6621).getColor(), greenTiles.get(6622).getColor(), greenTiles.get(6623).getColor(), greenTiles.get(6624).getColor(), greenTiles.get(6625).getColor(), greenTiles.get(6626).getColor(), greenTiles.get(6627).getColor(), greenTiles.get(6628).getColor(), greenTiles.get(6629).getColor(), greenTiles.get(6630).getColor(), greenTiles.get(6631).getColor(), greenTiles.get(6632).getColor(), greenTiles.get(6633).getColor(), greenTiles.get(6634).getColor(), greenTiles.get(6635).getColor(), greenTiles.get(6636).getColor(), greenTiles.get(6637).getColor(), greenTiles.get(6638).getColor(), greenTiles.get(6639).getColor(), redPlayerTiles.get(13).getColor(), greenTiles.get(6640).getColor(), redPlayerTiles.get(14).getColor(), greenTiles.get(6641).getColor(), redPoleTiles.get(0).getColor(), greenTiles.get(6642).getColor(), redPoleTiles.get(1).getColor(), greenTiles.get(6643).getColor(), greenTiles.get(6644).getColor(), greenTiles.get(6645).getColor(), greenTiles.get(6646).getColor(), greenTiles.get(6647).getColor(), greenTiles.get(6648).getColor(), greenTiles.get(6649).getColor(), greenTiles.get(6650).getColor(), greenTiles.get(6651).getColor(), greenTiles.get(6652).getColor(), greenTiles.get(6653).getColor(), greenTiles.get(6654).getColor(), greenTiles.get(6655).getColor(), greenTiles.get(6656).getColor(), greenTiles.get(6657).getColor(), greenTiles.get(6658).getColor(), greenTiles.get(6659).getColor(), greenTiles.get(6660).getColor(), greenTiles.get(6661).getColor(), greenTiles.get(6662).getColor(), greenTiles.get(6663).getColor(), greenTiles.get(6664).getColor(), greenTiles.get(6665).getColor(), greenTiles.get(6666).getColor(), greenTiles.get(6667).getColor(), greenTiles.get(6668).getColor(), greenTiles.get(6669).getColor(), greenTiles.get(6670).getColor(), greenTiles.get(6671).getColor(), greenTiles.get(6672).getColor(), greenTiles.get(6673).getColor(), greenTiles.get(6674).getColor(), greenTiles.get(6675).getColor(), greenTiles.get(6676).getColor(), greenTiles.get(6677).getColor(), greenTiles.get(6678).getColor(), greenTiles.get(6679).getColor(), greenTiles.get(6680).getColor(), greenTiles.get(6681).getColor(), greenTiles.get(6682).getColor(), greenTiles.get(6683).getColor(), greenTiles.get(6684).getColor(), greenTiles.get(6685).getColor(), greenTiles.get(6686).getColor(), greenTiles.get(6687).getColor(), greenTiles.get(6688).getColor(), greenTiles.get(6689).getColor(), greenTiles.get(6690).getColor(), greenTiles.get(6691).getColor(), greenTiles.get(6692).getColor(), greenTiles.get(6693).getColor(), greenTiles.get(6694).getColor(), greenTiles.get(6695).getColor(), greenTiles.get(6696).getColor(), greenTiles.get(6697).getColor(), greenTiles.get(6698).getColor(), greenTiles.get(6699).getColor(), greenTiles.get(6700).getColor(), greenTiles.get(6701).getColor(), greenTiles.get(6702).getColor(), greenTiles.get(6703).getColor(), greenTiles.get(6704).getColor(), greenTiles.get(6705).getColor(), greenTiles.get(6706).getColor(), greenTiles.get(6707).getColor(), greenTiles.get(6708).getColor(), greenTiles.get(6709).getColor(), greenTiles.get(6710).getColor(), blackTiles.get(266).getColor() },
             { blackTiles.get(267).getColor(), blackTiles.get(268).getColor(), blackTiles.get(269).getColor(), blackTiles.get(270).getColor(), blackTiles.get(271).getColor(), blackTiles.get(272).getColor(), blackTiles.get(273).getColor(), blackTiles.get(274).getColor(), blackTiles.get(275).getColor(), blackTiles.get(276).getColor(), blackTiles.get(277).getColor(), blackTiles.get(278).getColor(), blackTiles.get(279).getColor(), blackTiles.get(280).getColor(), blackTiles.get(281).getColor(), blackTiles.get(282).getColor(), blackTiles.get(283).getColor(), blackTiles.get(284).getColor(), blackTiles.get(285).getColor(), blackTiles.get(286).getColor(), blackTiles.get(287).getColor(), blackTiles.get(288).getColor(), blackTiles.get(289).getColor(), blackTiles.get(290).getColor(), blackTiles.get(291).getColor(), blackTiles.get(292).getColor(), blackTiles.get(293).getColor(), blackTiles.get(294).getColor(), blackTiles.get(295).getColor(), blackTiles.get(296).getColor(), blackTiles.get(297).getColor(), blackTiles.get(298).getColor(), blackTiles.get(299).getColor(), blackTiles.get(300).getColor(), blackTiles.get(301).getColor(), blackTiles.get(302).getColor(), blackTiles.get(303).getColor(), blackTiles.get(304).getColor(), blackTiles.get(305).getColor(), blackTiles.get(306).getColor(), blackTiles.get(307).getColor(), blackTiles.get(308).getColor(), blackTiles.get(309).getColor(), blackTiles.get(310).getColor(), blackTiles.get(311).getColor(), blackTiles.get(312).getColor(), blackTiles.get(313).getColor(), blackTiles.get(314).getColor(), blackTiles.get(315).getColor(), blackTiles.get(316).getColor(), blackTiles.get(317).getColor(), blackTiles.get(318).getColor(), blackTiles.get(319).getColor(), blackTiles.get(320).getColor(), blackTiles.get(321).getColor(), blackTiles.get(322).getColor(), blackTiles.get(323).getColor(), blackTiles.get(324).getColor(), blackTiles.get(325).getColor(), blackTiles.get(326).getColor(), blackTiles.get(327).getColor(), blackTiles.get(328).getColor(), blackTiles.get(329).getColor(), blackTiles.get(330).getColor(), blackTiles.get(331).getColor(), blackTiles.get(332).getColor(), blackTiles.get(333).getColor(), blackTiles.get(334).getColor(), blackTiles.get(335).getColor(), blackTiles.get(336).getColor(), blackTiles.get(337).getColor(), blackTiles.get(338).getColor(), blackTiles.get(339).getColor(), blackTiles.get(340).getColor(), blackTiles.get(341).getColor(), blackTiles.get(342).getColor(), blackTiles.get(343).getColor(), blackTiles.get(344).getColor(), blackTiles.get(345).getColor(), blackTiles.get(346).getColor(), blackTiles.get(347).getColor(), blackTiles.get(348).getColor(), blackTiles.get(349).getColor(), blackTiles.get(350).getColor(), blackTiles.get(351).getColor(), blackTiles.get(352).getColor(), blackTiles.get(353).getColor(), blackTiles.get(354).getColor(), blackTiles.get(355).getColor(), blackTiles.get(356).getColor(), blackTiles.get(357).getColor(), blackTiles.get(358).getColor(), blackTiles.get(359).getColor(), blackTiles.get(360).getColor(), blackTiles.get(361).getColor(), blackTiles.get(362).getColor(), blackTiles.get(363).getColor(), blackTiles.get(364).getColor(), blackTiles.get(365).getColor(), blackTiles.get(366).getColor(), blackTiles.get(367).getColor(), blackTiles.get(368).getColor(), blackTiles.get(369).getColor(), blackTiles.get(370).getColor(), blackTiles.get(371).getColor(), blackTiles.get(372).getColor(), blackTiles.get(373).getColor(), blackTiles.get(374).getColor(), blackTiles.get(375).getColor(), blackTiles.get(376).getColor(), blackTiles.get(377).getColor(), blackTiles.get(378).getColor(), blackTiles.get(379).getColor(), blackTiles.get(380).getColor(), blackTiles.get(381).getColor(), blackTiles.get(382).getColor(), blackTiles.get(383).getColor(), blackTiles.get(384).getColor(), blackTiles.get(385).getColor(), blackTiles.get(386).getColor(), blackTiles.get(387).getColor(), blackTiles.get(388).getColor(), blackTiles.get(389).getColor(), blackTiles.get(390).getColor(), blackTiles.get(391).getColor(), blackTiles.get(392).getColor(), blackTiles.get(393).getColor(), blackTiles.get(394).getColor(), blackTiles.get(395).getColor(), blackTiles.get(396).getColor(), blackTiles.get(397).getColor(), blackTiles.get(398).getColor(), blackTiles.get(399).getColor(), blackTiles.get(400).getColor(), blackTiles.get(401).getColor(), blackTiles.get(402).getColor(), blackTiles.get(403).getColor(), blackTiles.get(404).getColor(), blackTiles.get(405).getColor(), blackTiles.get(406).getColor(), blackTiles.get(407).getColor(), blackTiles.get(408).getColor(), blackTiles.get(409).getColor(), blackTiles.get(410).getColor(), blackTiles.get(411).getColor(), blackTiles.get(412).getColor(), blackTiles.get(413).getColor() }
         };
+        //@forammter:on
     }
 
-    public void printField() {
+    public void printField()throws InterruptedException,IOException {
         printField(null);
     }
 
-    public void printField(String selectedPlayerTile) {
+    public void printField(String selectedPlayerTile) throws InterruptedException,IOException {
+      Thread.sleep(10);
+      
+      
 
-        StringBuilder output = new StringBuilder();
+          // 1. Reuse the StringBuilder instead of allocating new memory
+      output.setLength(0); 
+      
+      // 2. Move cursor to top-left (0,0) WITHOUT clearing the screen (\033[2J causes flicker)
+      output.append("\033[H"); 
 
-        output.append("\033[H\033[2J");
+      for (int i = 0; i < this.feild.length; i++) {
+          for (int j = 0; j < this.feild[i].length; j++) {
+              String tile = this.feild[i][j];
+              if (tile.startsWith("BluePlayer")) {
+                  if (tile.equals(selectedPlayerTile)) {
+                      output.append(orange);
+                  } else {
+                      output.append(blue[1]);
+                  }
+              } else {
+                  output.append(tile);
+              }
+          }
+          // 3. Clear from the end of the row to the right edge of the terminal, then newline
+          output.append("\033[K\n");
+      }
+      
+      // 4. Clear anything left over below the grid (in case the grid shrinks)
+      output.append("\033[J"); 
 
-        for (int i = 0; i < this.feild.length; i++) {
-            for (int j = 0; j < this.feild[i].length; j++) {
-                String tile = this.feild[i][j];
-                if (tile.startsWith("BluePlayer")) {
-                    if (tile.equals(selectedPlayerTile)) {
-                        output.append(purple);
-                    } else {
-                        output.append(blue[1]);
-                    }
-                } else if (tile.startsWith("PurplePlayer")) {
-                    output.append(purple);
-                } else {
-                    output.append(tile);
-                }
-            }
-            output.append("\n");
-        }
-
-        System.out.print(output);
-        System.out.flush();
+      // 5. Write and flush once
+      out.write(output.toString());
+      out.flush();
+      
+      Thread.sleep(10);
+      
     }
 
     public static void clearTerminal() {
         System.out.println("\033[H\033[2J\033[3J");
-        System.out.flush();
     }
 
     public String[][] getField() {
