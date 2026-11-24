@@ -98,6 +98,7 @@ public class Game {
                 count++;
             } else {
                 count = 0;
+                Thread.sleep(10);
             }
         } else if (direction.equals("right")) {
             if (count2 < speed) {
@@ -105,12 +106,17 @@ public class Game {
                 count2++;
             } else {
                 count2 = 0;
+                Thread.sleep(10);
             }
         } else if (direction.equals("up")) {
             newRow -= 1;
         } else if (direction.equals("down")) {
             newRow += 1;
         } else {
+            return;
+        }
+
+        if (newRow == row && newCol == col) {
             return;
         }
 
@@ -126,7 +132,6 @@ public class Game {
         if (destination == null) {
             return;
         }
-
         // Restore this player's previous terrain and remember the destination terrain.
         board[row][col] = playerUnderlyingTiles[playerIndex];
         playerUnderlyingTiles[playerIndex] = destination;
@@ -134,6 +139,7 @@ public class Game {
 
         playerPosition[0] = newRow;
         playerPosition[1] = newCol;
+        Thread.sleep(10);
 
     }
 
@@ -188,7 +194,7 @@ public class Game {
     public static int calculateSpeed(Player player) {
         int skip = 0;
         int playerSpeedRating = player.getSpeed();
-        skip = (int) Math.ceil((playerSpeedRating / 10) + 1);
+        skip = (int) Math.ceil((playerSpeedRating / 40) + 0.01);
         return skip;
     }
 }
