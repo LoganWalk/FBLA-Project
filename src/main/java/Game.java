@@ -91,14 +91,21 @@ public class Game {
         }
         int newRow = row;
         int newCol = col;
+        boolean delay = false;
         if (direction.equals("left")) {
-            Thread.sleep((int) (speed / 2));
-            newCol -= 1;
-            Thread.sleep((int) (speed / 2));
+            if (count < speed) {
+                newCol -= 1;
+                count++;
+            } else {
+                count = 0;
+            }
         } else if (direction.equals("right")) {
-            Thread.sleep((int) (speed / 2));
-            newCol += 1;
-            Thread.sleep((int) (speed / 2));
+            if (count2 < speed) {
+                newCol += 1;
+                count2++;
+            } else {
+                count2 = 0;
+            }
         } else if (direction.equals("up")) {
             newRow -= 1;
         } else if (direction.equals("down")) {
@@ -127,6 +134,7 @@ public class Game {
 
         playerPosition[0] = newRow;
         playerPosition[1] = newCol;
+
     }
 
     public static void clearTerminal() {
@@ -157,8 +165,6 @@ public class Game {
                 } else if (inputValue == 'e') {
                     switchPlayer();
                     feild.printField("BluePlayer" + selectedPlayerIndex);
-                } else if (inputValue == 'q' || inputValue == -1) {
-                    break;
                 }
             }
         }
@@ -180,12 +186,9 @@ public class Game {
     }
 
     public static int calculateSpeed(Player player) {
-        int delaySpeed = 0;
-
+        int skip = 0;
         int playerSpeedRating = player.getSpeed();
-
-        delaySpeed = (int) ((1000 - (playerSpeedRating * 10)));
-
-        return delaySpeed;
+        skip = (int) Math.ceil((playerSpeedRating / 10) + 1);
+        return skip;
     }
 }

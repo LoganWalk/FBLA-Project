@@ -8,9 +8,9 @@ public class Character {
     private boolean isSelected;
     private ArrayList<Character> characters;
 
-    public Character(Tile tile, boolean isSelected, boolean hasBall, Player player) {
+    public Character(int speed, Tile tile, boolean isSelected, boolean hasBall, Player player) {
         this.player = player;
-        this.speed = generateSpeed();
+        this.speed = speed;
         this.isSelected = isSelected;
         this.hasBall = hasBall;
         characters.add(this);
@@ -37,7 +37,4 @@ public class Character {
         return this.isSelected;
     }
 
-    public int generateSpeed() {
-        return 1;
-    }
 }
