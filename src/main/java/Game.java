@@ -11,8 +11,8 @@ public class Game {
     private static int selectedPlayerIndex = 0;
     public static String purple = Field.orange;
     public static String blue = Field.blue[1];
-    public static int count = 0;
-    public static int count2 = 0;
+    // Tracks the last successful movement time separately for each player.
+    private static final long[] playerLastMoveTime = new long[15];
     public static Player player2 = new Player();
 
     // Each player keeps the terrain tile underneath them independently.
@@ -64,7 +64,7 @@ public class Game {
         return null;
     }
 
-    public static void move(String direction, int speed, int[] playerPosition) throws InterruptedException {
+    public static void move(String direction, int speedRating, int[] playerPosition) throws InterruptedException {
         if (playerPosition == null || playerPosition.length < 2 || direction == null) {
             return;
         }
@@ -89,27 +89,24 @@ public class Game {
         if (!playerTile.equals(board[row][col])) {
             return;
         }
+        int crossingSteps = Math.max(1, board[row].length - 1);
+        int movementDelay = calculateSpeed(speedRating, crossingSteps);
+        long currentTime = System.nanoTime();
+        long delayNanos = movementDelay * 1_000_000L;
+        if (playerLastMoveTime[playerIndex] != 0 && currentTime - playerLastMoveTime[playerIndex] < delayNanos) {
+            return;
+        }
+
         int newRow = row;
         int newCol = col;
-        boolean delay = false;
         if (direction.equals("left")) {
-            if (count < speed) {
-                newCol -= 1;
-                count++;
-            } else {
-                count = 0;
-            }
+            newCol--;
         } else if (direction.equals("right")) {
-            if (count2 < speed) {
-                newCol += 1;
-                count2++;
-            } else {
-                count2 = 0;
-            }
+            newCol++;
         } else if (direction.equals("up")) {
-            newRow -= 1;
+            newRow--;
         } else if (direction.equals("down")) {
-            newRow += 1;
+            newRow++;
         } else {
             return;
         }
@@ -128,6 +125,7 @@ public class Game {
         }
 
         // Restore this player's previous terrain and remember the destination terrain.
+        playerLastMoveTime[playerIndex] = currentTime;
         board[row][col] = playerUnderlyingTiles[playerIndex];
         playerUnderlyingTiles[playerIndex] = destination;
         board[newRow][newCol] = playerTile;
@@ -151,16 +149,16 @@ public class Game {
                 int inputValue = terminal.reader().read();
 
                 if (inputValue == 'a') {
-                    move("left", calculateSpeed(player2), findPlayer(player));
+                    move("left", player2.getSpeed(), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'd') {
-                    move("right", calculateSpeed(player2), findPlayer(player));
+                    move("right", player2.getSpeed(), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'w') {
-                    move("up", calculateSpeed(player2), findPlayer(player));
+                    move("up", player2.getSpeed(), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 's') {
-                    move("down", calculateSpeed(player2), findPlayer(player));
+                    move("down", player2.getSpeed(), findPlayer(player));
                     feild.printField("BluePlayer" + selectedPlayerIndex);
                 } else if (inputValue == 'e') {
                     switchPlayer();
@@ -185,10 +183,11 @@ public class Game {
         Thread.sleep(50);
     }
 
-    public static int calculateSpeed(Player player) {
-        int skip = 0;
-        int playerSpeedRating = player.getSpeed();
-        skip = (int) Math.ceil((playerSpeedRating / 10) + 1);
-        return skip;
+    // Returns the delay between successful moves, in milliseconds.
+    // A rating of 99 crosses the row in approximately 10 seconds.
+    public static int calculateSpeed(int speedRating, int crossingSteps) {
+        int rating = Math.max(1, Math.min(99, speedRating));
+        double crossingTimeMillis = 10_000.0 * (99.0 / rating);
+        return Math.max(1, (int) Math.round(crossingTimeMillis / crossingSteps));
     }
 }
