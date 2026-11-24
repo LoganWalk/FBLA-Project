@@ -50,7 +50,7 @@ public class Field {
     private final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
     private final StringBuilder output = new StringBuilder();
 
-    public Field() {
+    public Field(Player[] team) {
 
         for (int i = 0; i < 6711; i++)
             greenTiles.add(new Tile(green[1]));
@@ -88,6 +88,12 @@ public class Field {
         brownTiles.add(new Tile(brown[1]));
 
         this.feild = createField();
+        // assign a player and tile to a character
+        for (Tile tile : bluePlayerTiles) {
+            for (Player player : team) {
+
+            }
+        }
     }
 
     private String[][] createField() {

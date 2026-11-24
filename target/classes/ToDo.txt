@@ -15,11 +15,9 @@ use the thread.speed invidulauy for each movment like where it says new Row += 1
 
 add a delay above snd below, this will help acount for agility.
 
-make a method to calculate agility. 
+make a method to calculate agility and use the same logic as you did for speed
 make a method for jumping.
-start making an method for stamina that will mark down out 1 for length of stamina and then can regenerate and basically slows down the player with the speed delay added to the 
-stamina delay which rhe stamina delay would be 100 - stamina rating so the equation would be (int)(speedDelay + (100 - staminaRating)), do the same for agility so this is what 
-the equation would be (int)(agilityDelay + (100-stamina)).
+start making an method for stamina that will mark down out 1 for length of stamina and then can it can rengerate, also use the same logic as speed and amke it to where it slows you down not just stops you.
 
 
 --Important-- First Priority 

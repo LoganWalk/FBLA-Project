@@ -7,7 +7,8 @@ import java.io.OutputStreamWriter;
 
 public class Game {
     public static String[] player = Field.getTeam()[0];
-    public static Field feild = new Field();
+    public static Player[] team = new Player[8];
+    public static Field feild = new Field(team);
     private static int selectedPlayerIndex = 0;
     public static String purple = Field.orange;
     public static String blue = Field.blue[1];
@@ -26,7 +27,9 @@ public class Game {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        player2.setSpeed(99);
+        player2.setSpeed(50
+
+        );
         callMovement();
     }
 
@@ -135,7 +138,6 @@ public class Game {
 
         playerPosition[0] = newRow;
         playerPosition[1] = newCol;
-        Thread.sleep(10);
 
     }
 
